@@ -1,0 +1,50 @@
+@require '../../common.styl'
+
+#game-info .media-info
+	font-size 16px
+	float right
+	position relative
+	.ball
+		size 40px 40px
+		position absolute
+		right 22px
+		top 14px
+		color c-medium2
+		text-align center
+		line-height 12px
+		z-index 2
+		strong
+			margin-top 9px
+			font-size 20px
+			letter-spacing -1px
+			display block
+			color c-dark
+		small
+			font-size 10px
+			line-height 10px
+
+	p
+		margin 0 70px 30px 0
+		padding-top 20px
+		color c-medium2
+		span
+			color c-medium
+		&:after
+			content ' '
+			display block
+			height 14px
+			width 3px
+			background c-light
+			position absolute
+			right 41px
+			top 0
+
+	@media (max-width: 870px)
+		float none
+		clear both
+		p
+			text-align right
+			&:after
+				size 22px 3px
+				right 0
+				top 32px

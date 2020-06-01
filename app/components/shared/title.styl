@@ -1,0 +1,75 @@
+@require '../common.styl'
+
+.title
+	margin 10px 170px 0 0
+	padding 10px 30px 20px 100px
+	border 3px solid white
+	border-color c-light
+	border-top none
+	border-left none
+	color c-light
+	position relative
+	min-height 100px
+	h2, h3, h4
+		display block
+		margin 0
+		font-size 48px
+		font-weight 900
+		text-align right
+		line-height 42px
+		strong
+			color white
+			font-weight 900
+	h2
+		padding 10px 0 5px
+	h3
+		font-weight 400
+		font-size 22px
+		height auto
+		color c-medium
+		position relative
+		top -5px
+	h4
+		font-weight 200
+		font-size 18px
+		color c-medium
+		padding 5px 0 10px
+		line-height 21px
+		strong
+			font-weight 200
+		small
+			font-size 12px
+		.other-name
+			*
+				trans .3s
+			strong
+				font-weight normal
+				color c-medium2
+			small
+				font-weight normal
+				color c-dark
+				margin-right 10px
+			&:hover
+				strong
+					color c-medium
+				small
+					color c-dark2
+
+	.ball
+		size 100px 100px
+		position absolute
+		top -100px
+		right -51px
+
+	@media (max-width: 1024px)
+		margin-right 70px
+	@media (max-width: 500px)
+		margin-right 0
+		padding-right 40px
+		padding-left 40px
+		border-right none
+		.ball
+			display none
+		h2
+			font-size 42px
+			line-height 38px

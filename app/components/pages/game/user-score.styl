@@ -1,0 +1,40 @@
+@require '../../common.styl'
+
+#game-info .user-score
+	.ball
+		size 81px 81px
+		margin 144px 0 0 15px
+		text-align center
+	.label
+		display block
+		text-align left
+		font-size 10px
+		line-height 10px
+		text-transform lowercase
+		color c-medium2
+		margin 10px 24px 0 18px
+		line-height 8px
+	strong
+		size 100% 30px
+		padding-right 4px
+		font-size 30px
+		line-height 28px
+		letter-spacing -.1em
+		display block
+		text-shadow 2px 2px 5px c-medium
+	small
+		display block
+		text-align center
+		color c-dark
+		font-size 10px
+		line-height 9px
+		margin 0 20px 0 9px
+	n = 10
+	for c in scoresColours
+		.score{replace('\.', '-', '' + n)}
+			strong
+				color mix(c, c-dark, 50%)
+		n = n - .5
+	.scorebar
+		top 149px
+		left 21px

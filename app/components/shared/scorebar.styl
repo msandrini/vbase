@@ -1,0 +1,25 @@
+@require '../common.styl'
+
+.scorebar
+	position absolute
+
+	n = 10
+	for c in scoresColours
+		.colour{replace('\.', '-', '' + n)}
+			fill c
+		n = n - .5
+
+	.game-link &
+		right -46px
+		top 0
+		.out
+			fill c-dark
+
+	#game-info &
+		.out
+			fill rgba(c-medium, .6)
+		n = 10
+		for c in scoresColours
+			.colour{replace('\.', '-', '' + n)}
+				fill mix(c, c-dark, 60%)
+			n = n - .5

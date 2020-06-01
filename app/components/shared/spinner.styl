@@ -1,0 +1,35 @@
+@require '../common.styl'
+
+.spinner
+	margin 0 170px
+	padding 40px 0 0
+	height 180px
+	border-right 3px solid c-light
+	position relative
+	.ball
+		size 80px 80px
+		position absolute
+		right -42px
+		padding 9px
+	svg
+		color c-dark
+	span
+		display block
+		position absolute
+		top 75px
+		right 70px
+		color c-medium2
+		text-transform uppercase
+		font-size 10px
+		letter-spacing 2px
+
+	@media (max-width: 1024px)
+		margin-right 70px
+
+	@media (max-width: 500px)
+		margin-right 0
+		border-right 0
+		.ball
+			right 18px
+		span
+			right 130px
