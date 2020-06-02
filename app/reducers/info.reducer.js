@@ -1,34 +1,37 @@
 import { INFO } from '../constants'
 
 const initialState = {
-	isLoading: false,
-	hasFailed: false,
-	subject: '',
-	key: '',
-	title: '',
-	content: '',
-	imageExists: false
+  isLoading: false,
+  hasFailed: false,
+  subject: '',
+  key: '',
+  title: '',
+  content: '',
+  imageExists: false
 }
 
 const infoReducer = (state = initialState, action) => {
-	switch (action.type) {
+  switch (action.type) {
+    case INFO.CONTENTREQUESTED:
+      return { ...state, isLoading: false, subject: action.subject, key: action.key }
 
-		case INFO.CONTENTREQUESTED:
-			const {subject, key} = action
-			return { ...state, isLoading: false, subject, key }
+    case INFO.FAILEDLOADING:
+      return { ...state, isLoading: false, hasFailed: true }
 
-		case INFO.FAILEDLOADING:
-			return { ...state, isLoading: false, hasFailed: true }
+    case INFO.CONTENTRETRIEVED:
+      return {
+        ...state,
+        isLoading: false,
+        title: action.title,
+        content: action.content,
+        imageExists: action.imageExists
+      }
 
-		case INFO.CONTENTRETRIEVED:
-			const {title, content, imageExists} = action
-			return { ...state, isLoading: false, title, content, imageExists }
+      // case INFO.BACKREQUESTED - triggers saga
 
-		// case INFO.BACKREQUESTED - triggers saga
-
-		default:
-			return state
-	}
+    default:
+      return state
+  }
 }
 
 export default infoReducer

@@ -23,9 +23,9 @@ Run `npm run build:prod`
 ## TODO
 
 + Delete API server files
-- Modernize node.js server code
-- Upgrade all libs on package.json
++ Upgrade all libs on package.json
 - Install/setup lint again
+- Modernize node.js server code
 - Make app run on Parcel.js
 - Test all app functionalities
 - Rewrite frontend code to adapt to Hooks (and less reducer actions too)

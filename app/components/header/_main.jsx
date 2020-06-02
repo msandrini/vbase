@@ -7,12 +7,12 @@ import SearchFields from '../search/_main.jsx'
 import './_main.styl'
 
 const Header = () => (
-	<header>
-		<Logo />
-		<UserBox />
-		<TopLinks />
-		<SearchFields />
-	</header>
+  <header>
+    <Logo />
+    <UserBox />
+    <TopLinks />
+    <SearchFields />
+  </header>
 )
 
 export default Header

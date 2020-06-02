@@ -35,14 +35,14 @@ import userInputReducer from './reducers/user-input.reducer'
 
 /* Middleware routines */
 const combinedReducers = combineReducers({
-	login: loginReducer,
-	search: searchReducer,
-	contact: contactReducer,
-	results: resultsReducer,
-	game: gameReducer,
-	info: infoReducer,
-	routing: routerReducer,
-	userInput: userInputReducer
+  login: loginReducer,
+  search: searchReducer,
+  contact: contactReducer,
+  results: resultsReducer,
+  game: gameReducer,
+  info: infoReducer,
+  routing: routerReducer,
+  userInput: userInputReducer
 })
 const sagaMiddleware = createSagaMiddleware()
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
@@ -53,26 +53,26 @@ sagaMiddleware.run(rootSaga)
 /* Router mapping */
 const history = syncHistoryWithStore(browserHistory, store)
 history.listen(location => {
-	if (location.pathname === '/' + t('url__other-language-root')) {
-		document.location.reload()
-	}
+  if (location.pathname === '/' + t('url__other-language-root')) {
+    document.location.reload()
+  }
 })
 ReactDOM.render(
-	<Provider store={store}>
-		<Router history={history}>
-			<Route path="/" component={AppWrapper}>
-				<IndexRedirect to={t('url__all-games')} />
-				<Route path={t('url__all-games') + '(/:page)'} component={Results} />
-				<Route path={t('url__search') + '/:names(/:page)'} component={Results} />
-				<Route path={t('url__advanced-search') + '(/:page)'} component={Results} />
-				<Route path={t('url__game') + '/:game'} component={GamePage} />
-				<Route path={t('url__info') + '/:subject/:key'} component={InfoPage} />
-				<Route path={t('url__terms-privacy')} component={TermsPage} />
-				<Route path={t('url__contact')} component={ContactPage} />
-			</Route>
-		</Router>
-	</Provider>,
-	document.getElementById('app')
+  <Provider store={store}>
+    <Router history={history}>
+      <Route path='/' component={AppWrapper}>
+        <IndexRedirect to={t('url__all-games')} />
+        <Route path={t('url__all-games') + '(/:page)'} component={Results} />
+        <Route path={t('url__search') + '/:names(/:page)'} component={Results} />
+        <Route path={t('url__advanced-search') + '(/:page)'} component={Results} />
+        <Route path={t('url__game') + '/:game'} component={GamePage} />
+        <Route path={t('url__info') + '/:subject/:key'} component={InfoPage} />
+        <Route path={t('url__terms-privacy')} component={TermsPage} />
+        <Route path={t('url__contact')} component={ContactPage} />
+      </Route>
+    </Router>
+  </Provider>,
+  document.getElementById('app')
 )
 
 /* Other */
