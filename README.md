@@ -24,7 +24,7 @@ Run `npm run build:prod`
 
 + Delete API server files
 + Upgrade all libs on package.json
-- Install/setup lint again
++ Install/setup lint again
 - Modernize node.js server code
 - Make app run on Parcel.js
 - Test all app functionalities

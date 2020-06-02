@@ -67,3 +67,26 @@ export const optimizeScroll = () => {
     document.body.classList.remove('disable-hover')
   }, 500)
 }
+
+/* Get language to be used according to browser default languages */
+
+export const getUsableLanguage = () => {
+  const LANGUAGES = ['en', 'pt']
+  const DEFAULT_LANGUAGE = 'en'
+  const getProcessedCode = code => typeof code === 'string' ? code.substr(0, 2) : ''
+
+  const possibleLanguages = new Set(LANGUAGES)
+  if (navigator.languages && navigator.languages.length > 0) {
+    // make list unique and filtered for repetitions (we can have both 'en' and 'en-GB')
+    const userUsableLanguages = navigator.languages
+      .map(lang => getProcessedCode(lang))
+      .filter(pLang => possibleLanguages.has(pLang))
+    const uniqueLanguages = [...new Set(userUsableLanguages)]
+    if (uniqueLanguages.length) return uniqueLanguages[0]
+  }
+  if (navigator.language) {
+    const userLanguage = getProcessedCode(navigator.language)
+    if (possibleLanguages.has(userLanguage)) return userLanguage
+  }
+  return DEFAULT_LANGUAGE
+}

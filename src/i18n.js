@@ -1,12 +1,13 @@
 import i18nStringsEn from './i18n/en.json'
 import i18nStringsBr from './i18n/pt-br.json'
+import { getUsableLanguage } from './utils'
 
 const i18nDict = {
   en: i18nStringsEn,
   'pt-br': i18nStringsBr
 }
 
-export const lang = window.lang || 'en'
+window.lang = getUsableLanguage()
 
 /**
  * i18n core
