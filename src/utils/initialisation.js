@@ -6,8 +6,6 @@ import createSagaMiddleware from 'redux-saga'
 import rootSaga from '../sagas/root'
 
 /* Reducers */
-import loginReducer from '../reducers/login.reducer'
-import searchReducer from '../reducers/search.reducer'
 import resultsReducer from '../reducers/results.reducer'
 import contactReducer from '../reducers/contact.reducer'
 import gameReducer from '../reducers/game.reducer'
@@ -17,8 +15,6 @@ import userInputReducer from '../reducers/user-input.reducer'
 export const initReduxMiddlewaresAndGetStore = () => {
   /* Middleware routines */
   const combinedReducers = combineReducers({
-    login: loginReducer,
-    search: searchReducer,
     contact: contactReducer,
     results: resultsReducer,
     game: gameReducer,

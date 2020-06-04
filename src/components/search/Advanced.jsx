@@ -1,11 +1,10 @@
 /* exported React */
-import React, { useState, useReducer } from 'react'
-import { useDispatch } from 'react-redux'
+import React, { useReducer } from 'react'
 import { produce } from 'immer'
 
 import SelectBox from '../shared/SelectBox'
 import Icon from '../shared/Icon'
-import { SEARCH } from '../../utils/constants'
+import { historyTPush } from '../../utils/history'
 import t from '../../utils/i18n'
 
 import './Advanced.styl'
@@ -28,26 +27,31 @@ const initialInternalState = {
   }
 }
 
+const INTERNAL_ACTIONS = {
+  CHANGE_PLAIN: 'CHANGE_PLAIN',
+  CHANGE_RANGE: 'CHANGE_RANGE'
+}
+
 const internalReducer = produce((draft, action) => {
-  switch (action.type) {
-    case 'CHANGE_PLAIN':
-      draft[action.field] = action.value
-    break; case 'CHANGE_RANGE':
-      draft[action.field][action.fromOrTo] = action.value
+  if (action.type === INTERNAL_ACTIONS.CHANGE_PLAIN) {
+    draft[action.field] = action.value
+  } else if (action.type === INTERNAL_ACTIONS.CHANGE_RANGE) {
+    draft[action.field][action.fromOrTo] = action.value
   }
 })
 
 const AdvancedSearch = ({ isVisible, onHide }) => {
   const [internalState, internalDispatch] = useReducer(internalReducer, initialInternalState)
-  const dispatch = useDispatch()
-
-  const submitAdvancedSearch = createAction(SEARCH.SUBMITTEDADVANCED)
 
   /* pre-defined options */
 
-  const options = { years: [], scores: [], sizes: [
-    1, 2, 3, 4, 6, 8, 8.5, 10, 12, 16, 20, 24, 32, 40, 48, 64, 72
-  ]}
+  const options = {
+    years: [],
+    scores: [],
+    sizes: [
+      1, 2, 3, 4, 6, 8, 8.5, 10, 12, 16, 20, 24, 32, 40, 48, 64, 72
+    ]
+  }
   for (let y = 1989; y < 2001; y++) {
     options.years.push(y)
   }
@@ -59,13 +63,14 @@ const AdvancedSearch = ({ isVisible, onHide }) => {
 
   const handleSubmitForm = (ev) => {
     ev.preventDefault()
-    dispatch(submitAdvancedSearch({ data: internalState }))
+    historyTPush({ key: 'advanced-search', query: internalState })
   }
 
   /* sub-renders */
 
   const renderDoubleSelector = (field) => ['from', 'to'].map((fromOrTo, index) => (
     <SelectBox
+      key={fromOrTo}
       name={`${field}${index + 1}`}
       subLabel={t(fromOrTo)}
       value={internalState[field][fromOrTo]}
@@ -109,7 +114,7 @@ const AdvancedSearch = ({ isVisible, onHide }) => {
           <Icon type='x' size='24' />
         </a>
       )}
-      <form className={isVisible ? '' : ' hidden'} onSubmit={this.handleSubmitForm}>
+      <form className={isVisible ? '' : ' hidden'} onSubmit={handleSubmitForm}>
         <div className='advanced-search'>
           <div className='group'>
             <label htmlFor='names'>{t('names')}</label>

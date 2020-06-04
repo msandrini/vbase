@@ -130,7 +130,7 @@ const ResultsPage = () => {
     }
     return (
       <div>
-        <Pagination currentPage={page} results={total} linkFunction={handlePageChange} />
+        <Pagination currentPage={page} results={total} onGoToPage={handlePageChange} />
         <aside className='summary'>
           {t('showing-x-to-y-from', { replacements: [currentFirstItem, lastItemFromPage] })}
           <strong> {total} </strong>
@@ -139,7 +139,7 @@ const ResultsPage = () => {
         <section>
           {games.map(game => <GameLink key={game._id} game={game} />)}
         </section>
-        <Pagination currentPage={page} results={total} linkFunction={handlePageChange} />
+        <Pagination currentPage={page} results={total} onGoToPage={handlePageChange} />
       </div>
     )
   }

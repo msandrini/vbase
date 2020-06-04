@@ -8,7 +8,7 @@ import { historyTPush } from '../utils/history'
 import { RESULTS, API_URL } from '../utils/constants'
 import { lang } from '../utils/i18n'
 
-const _getCallName = (action) => {
+const getCallName = (action) => {
   let page = 1
   if (action.params.page && !isNaN(parseInt(action.params.page, 10))) {
     page = action.params.page
@@ -30,7 +30,7 @@ const _getCallName = (action) => {
 const resultsEffects = {
 
   request: function * (action) {
-    const callFeedback = _getCallName(action)
+    const callFeedback = getCallName(action)
 
     try {
       let feedback

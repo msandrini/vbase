@@ -1,24 +1,15 @@
 import { USERINPUT } from '../utils/constants'
 
 const initialState = {
-  overlayVisible: false,
-  isLoading: false,
   reviews: [],
-  isSending: false,
+  isLoading: false,
   listFailed: false,
-  sendFailed: false,
-  ownScore: null,
-  ownText: ''
+  isSending: false,
+  sendFailed: false
 }
 
 const userInputReducer = (state = initialState, action) => {
   switch (action.type) {
-    case USERINPUT.OVERLAYREQUESTED:
-      return { ...state, overlayVisible: true }
-
-    case USERINPUT.OVERLAYDISMISSED:
-      return { ...state, overlayVisible: false }
-
     case USERINPUT.LISTREQUESTED:
       return { ...state, isLoading: true }
 
@@ -27,12 +18,6 @@ const userInputReducer = (state = initialState, action) => {
 
     case USERINPUT.LISTFAILED:
       return { ...state, isLoading: false, listFailed: true }
-
-    case USERINPUT.SCORECHANGED:
-      return { ...state, ownScore: action.value }
-
-    case USERINPUT.TEXTCHANGED:
-      return { ...state, ownText: action.value }
 
     case USERINPUT.SUBMITTED:
       return { ...state, isSending: true, fields: action.fields }

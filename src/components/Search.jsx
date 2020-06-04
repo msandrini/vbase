@@ -1,20 +1,14 @@
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
 
 import AdvancedSearch from './search/Advanced'
-import { createAction } from '../utils/store'
-import { SEARCH } from '../utils/constants'
-
-import './Search.styl'
-import t from '../utils/i18n'
 import Icon from './shared/Icon'
+import { historyTPush } from '../utils/history'
+import t from '../utils/i18n'
+import './Search.styl'
 
 const Search = () => {
   const [advancedSearchIsVisible, setAdvancedSearchVisibility] = useState(false)
   const [searchFieldContent, setSearchFieldContent] = useState('')
-  const dispatch = useDispatch()
-
-  const submitSimpleSearch = createAction(SEARCH.SUBMITTEDSIMPLE)
 
   const handleToggleAdvancedSearch = () => {
     if (!advancedSearchIsVisible) {
@@ -27,7 +21,8 @@ const Search = () => {
   }
   const handleSubmitBasicSearch = (ev) => {
     ev.preventDefault()
-    dispatch(submitSimpleSearch({ value: searchFieldContent }))
+    const value = encodeURIComponent(searchFieldContent)
+    historyTPush({ key: 'search', rest: value })
   }
 
   return (

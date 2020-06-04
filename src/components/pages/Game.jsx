@@ -77,15 +77,13 @@ const GamePage = () => {
     info: game,
     gameId,
     seriesGames,
-    images,
-    currentImage
+    images
   } = useSelector(state => state.game)
   const dispatch = useDispatch()
   const params = useParams()
 
   const requestAction = createAction(GAME.REQUESTEDINFO)
   const failedAction = createAction(GAME.FAILEDONURL)
-  const changeImageAction = createAction(GAME.CHANGEIMAGEREQUESTED)
 
   const getGameInfo = () => {
     const gameIdIsOk = /[a-z0-9-]+/.test(gameId)
@@ -98,10 +96,6 @@ const GamePage = () => {
 
   // useEffect(getGameInfo, []) not sure if this is necessary
   useEffect(getGameInfo, [params.game])
-
-  const handleChangeImage = (increment) => {
-    this.props.changeImageAction({ increment })
-  }
 
   if (isLoading) {
     return (
@@ -128,12 +122,7 @@ const GamePage = () => {
           {game.specialStatus && (
             <span className='special-status'>{t('sps__' + game.specialStatus)}</span>
           )}
-          <GamePicture
-            gameId={gameId}
-            current={currentImage}
-            total={images}
-            onChangeImage={handleChangeImage}
-          />
+          <GamePicture gameId={gameId} total={images} />
           <div className='main-box'>
             <GamePlaces releasePlaces={game.releasePlaces} otherNames={game.otherNames} />
             <GameEditorScore score={game.editorScore} />
