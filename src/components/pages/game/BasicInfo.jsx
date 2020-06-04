@@ -1,4 +1,5 @@
 import React from 'react'
+
 import InfoLink from '../../shared/InfoLink'
 
 import './BasicInfo.styl'
@@ -9,10 +10,10 @@ const renderCompanies = companies => companies.map(c => (
   </InfoLink>
 ))
 
-const GameBasicInfo = props => (
+const GameBasicInfo = ({ companies, year }) => (
   <div className='basic-info'>
-    {renderCompanies(props.companies)}
-    <span className='year'>{props.year}</span>
+    {renderCompanies(companies)}
+    <span className='year'>{year}</span>
   </div>
 )
 

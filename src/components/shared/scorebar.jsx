@@ -20,15 +20,14 @@ const elements = [
   { score: 3, y: 93.742, x: 57.561 }
 ]
 
-const _getClass = (elementScore, gameScore) => {
+const getClassName = (elementScore, gameScore) => {
   const strScore = String(gameScore).replace('.', '-')
   if (gameScore === elementScore) {
     return `colour${strScore}`
   } else if (gameScore > elementScore) {
     return `colour${strScore}` /* not settled down yet? */
-  } else {
-    return 'out'
   }
+  return 'out'
 }
 
 const Scorebar = ({ score, size }) => (
@@ -39,7 +38,7 @@ const Scorebar = ({ score, size }) => (
     >
       <g>
         {elements.map((e, i) => (
-          <circle cx={e.x} cy={e.y} r='3.052' key={i} className={_getClass(e.score, score)} />
+          <circle cx={e.x} cy={e.y} r='3.052' key={i} className={getClassName(e.score, score)} />
         ))}
       </g>
     </svg>

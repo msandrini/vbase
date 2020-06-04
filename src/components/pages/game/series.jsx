@@ -3,12 +3,13 @@ import React from 'react'
 import Icon from '../../shared/Icon'
 import TLink from '../../shared/TLink'
 import InfoLink from '../../shared/InfoLink'
+
 import t from '../../../utils/i18n'
 import './Series.styl'
 
 export const getLinkObj = id => ({ key: 'game', rest: id })
 
-const _getLink = (game, currentGameId) => (
+const renderEntryLink = (game, currentGameId) => (
   <li key={game._id}>
     {game._id !== currentGameId ? (
       <TLink className='btn ball' to={getLinkObj(game._id)}>
@@ -26,6 +27,8 @@ const _getLink = (game, currentGameId) => (
     )}
   </li>
 )
+
+// TODO improve logic (after everything more important)
 
 const GameSeries = ({ series, seriesGames, currentGameId }) => (
   <div className='series'>
@@ -55,7 +58,7 @@ const GameSeries = ({ series, seriesGames, currentGameId }) => (
     )}
     {series && seriesGames.games && (
       <ul>
-        {seriesGames.games.map(g => _getLink(g, currentGameId))}
+        {seriesGames.games.map(g => renderEntryLink(g, currentGameId))}
       </ul>
     )}
   </div>

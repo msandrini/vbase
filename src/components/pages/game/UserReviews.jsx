@@ -1,47 +1,48 @@
-import React from 'react'
-import { connect } from 'react-redux'
-import { USERINPUT } from '../../../utils/constants'
-import { createAction } from '../../../utils/store'
+import React, { useState } from 'react'
 
 import GameUserReviewsOverlay from './userReviews/Overlay'
 import Icon from '../../shared/Icon'
+
 import t from '../../../utils/i18n'
 import './UserReviews.styl'
 
-const _getKeyForActionText = reviews => reviews ? 'read-write' : 'write-a-review'
-const _getIcon = reviews => reviews ? 'plus' : 'pencil'
-const _getNumReviews = reviews => (reviews && reviews.timesReviewed) || 0
+const getKeyForActionText = reviews => reviews ? 'read-write' : 'write-a-review'
+const getIcon = reviews => reviews ? 'plus' : 'pencil'
+const getNumReviews = reviews => (reviews && reviews.timesReviewed) || 0
 
-const GameUserReviews = ({ userReviews, toggleAction, gameId }) => (
-  <div className='user-reviews'>
-    <a onClick={() => toggleAction({ gameId })}>
-      <span className='first-text'>
-        {t('reviewed-by')}
-        {' '}
-        {_getNumReviews(userReviews) ? (
-          <strong>
-            {_getNumReviews(userReviews) + ' ' + t('user', { plural: _getNumReviews(userReviews) })}
-          </strong>
-        ) : t('no-users')}
-      </span>
-      <span className='mobile-text'>
-        {t('review', { plural: _getNumReviews(userReviews) })}
-        {' '}
-        ({_getNumReviews(userReviews)})
-      </span>
-      <span className='action-text'>
-        {t(_getKeyForActionText(_getNumReviews(userReviews)))}
-      </span>
-      <span className={'btn ball ' + _getIcon(_getNumReviews(userReviews))}>
-        <Icon type={_getIcon(_getNumReviews(userReviews))} size='11' />
-      </span>
-    </a>
-    <GameUserReviewsOverlay />
-  </div>
-)
-
-const mapDispatchToProps = {
-  toggleAction: createAction(USERINPUT.OVERLAYREQUESTED)
+const GameUserReviews = ({ userReviews, gameId }) => {
+  const [isOverlayVisible, setOverlayVisibility] = useState(false)
+  return (
+    <div className='user-reviews'>
+      <a onClick={() => setOverlayVisibility(true)}>
+        <span className='first-text'>
+          {t('reviewed-by')}
+          {' '}
+          {getNumReviews(userReviews) ? (
+            <strong>
+              {getNumReviews(userReviews) + ' ' + t('user', { plural: getNumReviews(userReviews) })}
+            </strong>
+          ) : t('no-users')}
+        </span>
+        <span className='mobile-text'>
+          {t('review', { plural: getNumReviews(userReviews) })}
+          {' '}
+          ({getNumReviews(userReviews)})
+        </span>
+        <span className='action-text'>
+          {t(getKeyForActionText(getNumReviews(userReviews)))}
+        </span>
+        <span className={'btn ball ' + getIcon(getNumReviews(userReviews))}>
+          <Icon type={getIcon(getNumReviews(userReviews))} size='11' />
+        </span>
+      </a>
+      <GameUserReviewsOverlay
+        gameId={gameId}
+        isVisible={isOverlayVisible}
+        onHide={() => setOverlayVisibility(false)}
+      />
+    </div>
+  )
 }
 
-export default connect(null, mapDispatchToProps)(GameUserReviews)
+export default GameUserReviews

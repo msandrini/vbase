@@ -7,16 +7,16 @@ import t, { lang } from '../../utils/i18n'
 import './GameLink.styl'
 import TLink from './TLink'
 
-const _getGenres = genres => {
+const getGenres = genres => {
   if (genres && genres[0]) {
     return genres[0][lang] + (genres[1] ? ' / ' + genres[1][lang] : '')
   }
   return ''
 }
-const _getCompanies = companies => {
-  return companies[0] + (companies[1] ? ' / ' + companies[1] : '')
-}
-const _getAka = game => {
+const getCompanies = companies =>
+  companies[0] + (companies[1] ? ' / ' + companies[1] : '')
+
+const getAka = game => {
   if (game.otherNames) {
     const namesComposed = []
     for (const n of game.otherNames) {
@@ -26,7 +26,7 @@ const _getAka = game => {
   }
   return ''
 }
-const _getSpecialStatus = status => {
+const getSpecialStatus = status => {
   if (status.substr(0, 5) === 'proto') {
     return t('prototype')
   } else if (status === 'released-unlicensed') {
@@ -36,23 +36,25 @@ const _getSpecialStatus = status => {
   }
   return ''
 }
-const _getFirstImageUrl = id => `${IMAGEGAME_URL}${id}/1.png`
+const getFirstImageUrl = id => `${IMAGEGAME_URL}${id}/1.png`
 
 class GameLink extends Component {
   render () {
     const { game } = this.props
     return (
       <TLink className='game-link' to={{ key: 'game', rest: game._id }}>
-        <figure><img src={_getFirstImageUrl(game._id)} alt={game.title} /></figure>
+        <figure><img src={getFirstImageUrl(game._id)} alt={game.title} /></figure>
         <div className='content'>
-          <div className='aka'>{_getAka(game)}</div>
+          <div className='aka'>{getAka(game)}</div>
           <h5>{game.title}</h5>
           <div className='supplementary-info'>
             <Scorebar score={game.editorScore} size='85' />
             {game.specialStatus && (
-              <span className='special-status'>{_getSpecialStatus(game.specialStatus)}</span>
+              <span className='special-status'>{getSpecialStatus(game.specialStatus)}</span>
             )}
-            <strong>{_getGenres(game.genreTitles)}</strong> {t('made-by')} {_getCompanies(game.companyNames)}
+            <strong>{getGenres(game.genreTitles)}</strong>
+            {t('made-by')}
+            {getCompanies(game.companyNames)}
           </div>
         </div>
       </TLink>

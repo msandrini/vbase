@@ -1,11 +1,17 @@
 import React from 'react'
 import Icon from './Icon'
 
-const SelectBox = props => (
+const SelectBox = ({
+  subLabel,
+  onChange,
+  value,
+  name,
+  children
+}) => (
   <div className='select-box'>
-    {props.subLabel ? <span>{props.subLabel}</span> : ''}
-    <select onChange={props.onChange} value={props.value} name={props.name}>
-      {props.children}
+    {!!subLabel && <span>{subLabel}</span>}
+    <select onChange={onChange} value={value} name={name}>
+      {children}
     </select>
     <Icon size='10' type='downarrow' />
   </div>

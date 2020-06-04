@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { connect, useSelector, useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { useParams } from 'react-router'
 
 import PageTitle from '../shared/PageTitle'
@@ -26,7 +26,7 @@ const getContent = content => {
   return <span className='no-content'>{t('no-content')}</span>
 }
 
-const getImageUrl = (subject, subjectKey) => 
+const getImageUrl = (subject, subjectKey) =>
   `${IMAGEINFO_URL}${keyToDbMapping[subject]}/${subjectKey}/1.png`
 
 const getLinkStr = (subject, title) => {

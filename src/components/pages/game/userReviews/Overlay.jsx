@@ -1,131 +1,82 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { USERINPUT } from '../../../../utils/constants'
-import { createAction } from '../../../../utils/store'
-import GameUserReviewEntry from './Entry'
-import GameUserReviewForm from './Form'
+import React, { useEffect } from 'react'
+import { useSelector } from 'react-redux'
+import GameUserReviewEntry from './overlay/Entry'
+import GameUserReviewForm from './overlay/Form'
 
 import Icon from '../../../shared/Icon'
 import t from '../../../../utils/i18n'
 import './Overlay.styl'
 
-class GameUserReviewsOverlay extends Component {
-  constructor () {
-    super()
-    this.handleCloseButtonClick = this.handleCloseButtonClick.bind(this)
-    this._changeField = this._changeField.bind(this)
-    this._sendOwnReview = this._sendOwnReview.bind(this)
-    this.handleOverlayClick = this.handleOverlayClick.bind(this)
-  }
+const GameUserReviewsOverlay = ({ gameId, isVisible, onHide }) => {
+  const { reviews } = useSelector(state => state.userInput.reviews)
 
-  componentWillReceiveProps (nextProps) {
-    if (nextProps.overlayVisible !== this.props.overlayVisible) {
-      this._setBodyScroll(nextProps.overlayVisible)
-    }
-  }
-
-  _setBodyScroll (isVisible) {
+  useEffect(() => {
     const classList = document.body.classList
     isVisible ? classList.add('overlayed') : classList.remove('overlayed')
+  }, [isVisible])
+
+  const handleCloseButtonClick = () => {
+    onHide()
   }
 
-  _changeField (field) {
-    let fn = this.props.changeScoreAction
-    if (field === 'text') {
-      fn = this.props.changeTextAction
-    }
-    return value => fn({ value })
-  }
-
-  _sendOwnReview (e) {
-    e.preventDefault()
-    if (!this.props.isLoggedIn) {
-      window.alert(t('login-required'))
-    } else if (!this.props.ownScore) {
-      window.alert(t('enter-score'))
-    } else {
-      this.props.submitAction({
-        fields: {
-          score: this.props.ownScore,
-          text: this.props.ownText,
-          game: this.props.gameId
-        }
-      })
-    }
-  }
-
-  handleCloseButtonClick () {
-    this.props.closeAction()
-  }
-
-  handleOverlayClick (e) {
+  const handleOverlayClick = (e) => {
     e.stopPropagation()
     if (e.target.id === 'user-reviews-overlay') {
-      this.props.closeAction()
+      onHide()
     }
   }
 
-  render () {
-    return (
-      <div
-        id='user-reviews-overlay'
-        onClick={this.handleOverlayClick}
-        className={this.props.overlayVisible ? '' : 'inactive'}
-      >
-        <div className='window'>
-          <a className='btn ball close' onClick={this.handleCloseButtonClick}>
-            <Icon type='x' size='24' />
-          </a>
-          <h5>{t('user-reviews-for-this-game')}
-            {this.props.reviews.length > 0 && (
-              <small>
-                {this.props.reviews.length + ' ' + t('review', { plural: this.props.reviews.length })}
-              </small>
-            )}
-          </h5>
-          {this.props.reviews.length > 0 && (
-            <ul>
-              {this.props.reviews.map((review, key) => (
-                <li key={key}>
-                  <GameUserReviewEntry review={review} />
-                </li>
-              ))}
-            </ul>
+  return (
+    <div
+      id='user-reviews-overlay'
+      onClick={handleOverlayClick}
+      className={isVisible ? '' : 'inactive'}
+    >
+      <div className='window'>
+        <a className='btn ball close' onClick={handleCloseButtonClick}>
+          <Icon type='x' size='24' />
+        </a>
+        <h5>{t('user-reviews-for-this-game')}
+          {reviews.length > 0 && (
+            <small>
+              {reviews.length + ' ' + t('review', { plural: reviews.length })}
+            </small>
           )}
-          {this.props.reviews.length === 0 && (
-            <div className='no-reviews'>{t('no-reviews')}</div>
-          )}
-          <GameUserReviewForm
-            send={this._sendOwnReview}
-            ownScore={this.props.ownScore}
-            ownText={this.props.ownText}
-            changeScore={this._changeField('score')}
-            changeText={this._changeField('text')}
-          />
-        </div>
+        </h5>
+        {reviews.length > 0 && (
+          <ul>
+            {reviews.map((review, key) => (
+              <li key={key}>
+                <GameUserReviewEntry review={review} />
+              </li>
+            ))}
+          </ul>
+        )}
+        {reviews.length === 0 && (
+          <div className='no-reviews'>{t('no-reviews')}</div>
+        )}
+        <GameUserReviewForm gameId={gameId} />
       </div>
-    )
-  }
+    </div>
+  )
 }
 
-const mapStateToProps = state => ({
-  overlayVisible: state.userInput.overlayVisible,
-  isLoading: state.userInput.isLoading,
-  isSending: state.userInput.isSending,
-  reviews: state.userInput.reviews,
-  listFailed: state.userInput.listFailed,
-  sendFailed: state.userInput.sendFailed,
-  ownScore: state.userInput.ownScore,
-  ownText: state.userInput.ownText,
-  isLoggedIn: state.login.loggedIn,
-  gameId: state.game.gameId
-})
+// const mapStateToProps = state => ({
+//   isLoading: state.userInput.isLoading,
+//   isSending: state.userInput.isSending,
+//   reviews: state.userInput.reviews,
+//   listFailed: state.userInput.listFailed,
+//   sendFailed: state.userInput.sendFailed,
+//   ownScore: state.userInput.ownScore,
+//   ownText: state.userInput.ownText,
+//   isLoggedIn: state.login.loggedIn,
+//   gameId: state.game.gameId
+// })
 
-const mapDispatchToProps = {
-  closeAction: createAction(USERINPUT.OVERLAYDISMISSED),
-  submitAction: createAction(USERINPUT.SUBMITTED),
-  changeScoreAction: createAction(USERINPUT.SCORECHANGED),
-  changeTextAction: createAction(USERINPUT.TEXTCHANGED)
-}
+// const mapDispatchToProps = {
+//   submitAction: createAction(USERINPUT.SUBMITTED),
+//   changeScoreAction: createAction(USERINPUT.SCORECHANGED),
+//   changeTextAction: createAction(USERINPUT.TEXTCHANGED)
+// }
 
-export default connect(mapStateToProps, mapDispatchToProps)(GameUserReviewsOverlay)
+export default GameUserReviewsOverlay

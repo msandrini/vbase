@@ -4,7 +4,7 @@ import t from '../../utils/i18n'
 import './FailureMessage.styl'
 
 const FailureMessage = (props) => {
-  console.log(props)
+  console.warn(props)
   return (
     <div className='failure-message'>
       <strong>{t('error')}</strong>

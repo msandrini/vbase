@@ -1,6 +1,6 @@
 import React from 'react'
 
-const AllIcons = props => (
+const AllIcons = () => (
   <div className='all-icons'>
 
     <svg version='1.1' id='icones' xmlns='http://www.w3.org/2000/svg' width='0' height='0'>
@@ -45,12 +45,19 @@ const AllIcons = props => (
       </g>
 
       <g id='icon_person'>
-        <circle cx='49.562' cy='32.454' r='25.038' /><path d='M100,94v0.812C100,75.822,83.052,62,64.062,62H35.938C16.95,62,0,75.822,0,94.812V94H100z' />
+        <circle cx='49.562' cy='32.454' r='25.038' />
+        <path d='M100,94v0.812C100,75.822,83.052,62,64.062,62H35.938C16.95,62,0,75.822,0,94.812V94H100z' />
       </g>
 
-      <g id='icon_mail'><polygon points='50,59.78 0,28.644 0,82 100,82 100,28.644 ' /><polygon points='50.121,49.1 99.964,18 0.276,18 ' /></g>
+      <g id='icon_mail'>
+        <polygon points='50,59.78 0,28.644 0,82 100,82 100,28.644 ' />
+        <polygon points='50.121,49.1 99.964,18 0.276,18 ' />
+      </g>
 
-      <g id='icon_plus'><rect y='37' width='100' height='25' /><rect x='37' width='25' height='100' /></g>
+      <g id='icon_plus'>
+        <rect y='37' width='100' height='25' />
+        <rect x='37' width='25' height='100' />
+      </g>
 
       <polygon id='icon_x' points='93.841,23.13 76.163,5.452 49.293,32.322 23.13,6.159 5.452,23.837 31.615,50 5.452,76.163 23.13,93.841 49.293,67.678 76.163,94.548 93.841,76.87 66.971,50 ' />
 
@@ -74,16 +81,20 @@ const AllIcons = props => (
         <rect x='39.065' y='15.74' transform='matrix(0.7071 -0.7071 0.7071 0.7071 -20.7289 49.8749)' width='21.55' height='68.438' />
       </g>
 
-      <polygon id='icon_downarrow' points='0,20 100,20 50,80.215 ' />
-      <polygon id='icon_uparrow' points='0,20 100,20 50,80.215 ' transform='rotate(180,50,45)' />
+      <polygon id='icon_downarrow' points='0,20 100,20 50,80.215' />
+      <polygon id='icon_uparrow' points='0,20 100,20 50,80.215' transform='rotate(180,50,45)' />
 
       <g id='icon_thumbs'>
-        <rect width='42' height='42' /><rect x='58' width='42' height='42' />
-        <rect y='58' width='42' height='42' /><rect x='58' y='58' width='42' height='42' />
+        <rect width='42' height='42' />
+        <rect x='58' width='42' height='42' />
+        <rect y='58' width='42' height='42' />
+        <rect x='58' y='58' width='42' height='42' />
       </g>
 
       <g id='icon_lines'>
-        <rect width='100' height='23' /><rect y='77' width='100' height='23' /><rect y='38' width='100' height='23' />
+        <rect width='100' height='23' />
+        <rect y='77' width='100' height='23' />
+        <rect y='38' width='100' height='23' />
       </g>
 
       <path id='icon_eye' d='M50,21.085c-21.38,0-40.03,11.638-50,28.914c9.97,17.277,28.62,28.915,50,28.915c21.38,0,40.03-11.638,50-28.915 C90.03,32.723,71.38,21.085,50,21.085z M50,68.131c-10.471,0-18.958-8.488-18.958-18.959S39.529,30.214,50,30.214 s18.958,8.487,18.958,18.958S60.471,68.131,50,68.131z' />

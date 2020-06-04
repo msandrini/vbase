@@ -1,9 +1,6 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-
-import { createAction } from '../../utils/store'
-import { joinText } from '../../utils/string'
-import { RESULTS, ITEMS_PER_PAGE } from '../../utils/constants'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useParams, useLocation } from 'react-router'
 
 import PageTitle from '../shared/PageTitle'
 import Title from '../shared/Title'
@@ -13,10 +10,15 @@ import FailureMessage from '../shared/FailureMessage'
 import Pagination from '../shared/Pagination'
 import GameLink from '../shared/GameLink'
 
+import { goBack } from '../../utils/history'
+import { createAction } from '../../utils/store'
+import { joinText } from '../../utils/string'
+import { RESULTS, ITEMS_PER_PAGE } from '../../utils/constants'
+
 import t from '../../utils/i18n'
 import './Results.styl'
 
-const _getComposedSearchDetails = query => {
+const getComposedSearchDetails = query => {
   const searchDetails = []
   for (const obj of ['scores', 'sizes', 'years']) {
     if (!query[obj]) {
@@ -61,110 +63,95 @@ const _getComposedSearchDetails = query => {
   }
 
   if (searchDetails.length) {
-    return t('searching-for-games') + ' ' + (searchDetails.length > 1 ? joinText(searchDetails, ',', t('and')) : searchDetails[0])
-  } else {
-    return t('advanced-search')
+    return t('searching-for-games') + ' ' + joinText(searchDetails)
   }
+  return t('advanced-search')
 }
 
-const _getTitle = (params, location) => {
+const getTitle = (params, location) => {
   if (location.query && Object.keys(location.query).length) {
-    const composedSearchDetails = _getComposedSearchDetails(location.query)
-    return [<Title key='title' main={t('showing-results')} details={[composedSearchDetails]} />,
-      <PageTitle key='pagetitle' title={t('advanced-search')} />]
+    const composedSearchDetails = getComposedSearchDetails(location.query)
+    return [
+      <Title key='title' main={t('showing-results')} details={[composedSearchDetails]} />,
+      <PageTitle key='pagetitle' title={t('advanced-search')} />
+    ]
   } else if (params.names) {
-    return [<Title key='title' main={t('showing-results')} sub={t('searching-for-x', { replacements: params.names })} />,
-      <PageTitle key='pagetitle' title={t('basic-search')} />]
-  } else {
-    return [<Title key='title' main={t('showing-all-games')} sub='' />,
-      <PageTitle key='pagetitle' title={t('all-games')} />]
+    return [
+      <Title key='title' main={t('showing-results')} sub={t('searching-for-x', { replacements: params.names })} />,
+      <PageTitle key='pagetitle' title={t('basic-search')} />
+    ]
   }
+  return [
+    <Title key='title' main={t('showing-all-games')} sub='' />,
+    <PageTitle key='pagetitle' title={t('all-games')} />
+  ]
 }
 
-class ResultsPage extends Component {
-  constructor (props) {
-    super(props)
-    this.handleBackButtonClick = this.handleBackButtonClick.bind(this)
+const ResultsPage = () => {
+  const { games, total, isLoading, hasFailed } = useSelector(state => state.results)
+  const params = useParams()
+  const location = useLocation()
+  const dispatch = useDispatch()
+
+  const requestAction = createAction(RESULTS.REQUESTED)
+  const requestPageAction = createAction(RESULTS.PAGEREQUESTED)
+
+  const getResults = () => {
+    dispatch(requestAction({ params, query: location.query }))
   }
 
-  componentWillMount () {
-    this._getResults(this.props)
+  // useEffect(getResults, []) not sure if this is necessary
+  useEffect(getResults, [params.names, location.search, params.page])
+
+  const handlePageChange = (page) => {
+    dispatch(requestPageAction({ page, params, query: location.query }))
   }
 
-  componentWillUpdate (nextProps) {
-    const differentNames = nextProps.params.names !== this.props.params.names
-    const differentQueries = nextProps.location.search !== this.props.location.search
-    const differentPages = nextProps.params.page !== this.props.params.page
-    if (differentNames || differentQueries || differentPages) {
-      this._getResults(nextProps)
+  /* inner content render */
+
+  const page = parseInt(params.page, 10) || parseInt(location.query.page, 10) || 1
+  const currentFirstItem = ITEMS_PER_PAGE * page
+  const isLastPage = (currentFirstItem + ITEMS_PER_PAGE) > total
+  const lastItemFromPage = isLastPage ? total : currentFirstItem + ITEMS_PER_PAGE
+  const renderContent = () => {
+    if (isLoading) return <Spinner />
+    if (hasFailed) return <FailureMessage />
+    if (!games.length) {
+      return (
+        <div className='no-results'>
+          <p>{t('no-results-found')}</p>
+          <div className='button-wrapper'>
+            <button className='btn ball' title={t('go-back')} onClick={() => goBack()}>
+              <Icon type='prev' size='28' />
+            </button>
+          </div>
+        </div>
+      )
     }
-  }
-
-  _getResults (props) {
-    this.props.requestAction({ params: props.params, query: props.location.query })
-  }
-
-  _changePage (page) {
-    const params = this.props.params
-    const query = this.props.location.query
-    this.props.requestPageAction({ page, params, query })
-  }
-
-  handleBackButtonClick () {
-    this.props.requestBackAction()
-  }
-
-  // TODO clean it up (nested ternaries)
-
-  render () {
-    const { params, location, games, total, isLoading, hasFailed } = this.props
-    const page = parseInt(params.page, 10) || parseInt(location.query.page, 10) || 1
-    const currentFirstItem = ITEMS_PER_PAGE * page
-    const lastItemFromPage = (currentFirstItem + ITEMS_PER_PAGE > total) ? total : currentFirstItem + ITEMS_PER_PAGE
     return (
-      <div className='results'>
-        {_getTitle(params, location)}
-        {isLoading ? <Spinner />
-          : (hasFailed ? <FailureMessage />
-            : (!games.length ? (
-              <div className='no-results'>
-                <p>{t('no-results-found')}</p>
-                <div className='button-wrapper'>
-                  <button className='btn ball' title={t('go-back')} onClick={this.handleBackButtonClick}>
-                    <Icon type='prev' size='28' />
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <div>
-                <Pagination currentPage={page} results={total} linkFunction={v => this._changePage(v)} />
-                <aside className='summary'>
-                  {t('showing-x-to-y-from', { replacements: [currentFirstItem, lastItemFromPage] })}
-                  <strong> {total} </strong>
-                  {t('result', { plural: total })}
-                </aside>
-                <section>
-                  {games.map(game => <GameLink key={game._id} game={game} />)}
-                </section>
-                <Pagination currentPage={page} results={total} linkFunction={v => this._changePage(v)} />
-              </div>
-            )))}
+      <div>
+        <Pagination currentPage={page} results={total} linkFunction={handlePageChange} />
+        <aside className='summary'>
+          {t('showing-x-to-y-from', { replacements: [currentFirstItem, lastItemFromPage] })}
+          <strong> {total} </strong>
+          {t('result', { plural: total })}
+        </aside>
+        <section>
+          {games.map(game => <GameLink key={game._id} game={game} />)}
+        </section>
+        <Pagination currentPage={page} results={total} linkFunction={handlePageChange} />
       </div>
     )
   }
+
+  /* final render */
+
+  return (
+    <div className='results'>
+      {getTitle(params, location)}
+      {renderContent()}
+    </div>
+  )
 }
 
-const mapStateToProps = state => ({
-  games: state.results.games,
-  total: state.results.total,
-  isLoading: state.results.isLoading,
-  hasFailed: state.results.hasFailed
-})
-
-const mapDispatchToProps = {
-  requestAction: createAction(RESULTS.REQUESTED),
-  requestPageAction: createAction(RESULTS.PAGEREQUESTED),
-  requestBackAction: createAction(RESULTS.BACKREQUESTED)
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(ResultsPage)
+export default ResultsPage

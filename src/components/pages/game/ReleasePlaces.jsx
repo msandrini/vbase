@@ -1,11 +1,11 @@
 import React from 'react'
 import reactStringReplace from 'react-string-replace'
-import { joinText } from '../../../utils/string'
 
+import { joinText } from '../../../utils/string'
 import t from '../../../utils/i18n'
 import './ReleasePlaces.styl'
 
-const _getReleasePlacesObject = ({ releasePlaces, otherNames }) => {
+const getReleasePlacesObject = ({ releasePlaces, otherNames }) => {
   const localNames = (otherNames && otherNames.filter(on => on.reasonForName === 'local')) || []
   const releasePlacesObj = {}
   const placeKeysWithNames = []
@@ -14,7 +14,7 @@ const _getReleasePlacesObject = ({ releasePlaces, otherNames }) => {
       for (const pn of ln.place) {
         placeKeysWithNames.push(t(`loc__${pn}`))
       }
-      releasePlacesObj[joinText(placeKeysWithNames, ', ', ` ${t('and')} `)] = ln.name
+      releasePlacesObj[joinText(placeKeysWithNames)] = ln.name
     }
     for (const p of releasePlaces) {
       if (!placeKeysWithNames.includes(t(`loc__${p}`))) {
@@ -25,15 +25,15 @@ const _getReleasePlacesObject = ({ releasePlaces, otherNames }) => {
   return releasePlacesObj
 }
 
-const _getPlacesString = props => {
-  const places = _getReleasePlacesObject(props)
+const getPlacesString = props => {
+  const places = getReleasePlacesObject(props)
   const placesStr = []
   const placeKeys = Object.keys(places)
   for (const p of placeKeys) {
     placesStr.push(t('in') + ` ${p}` + (places[p] ? (` ${t('as')} *${places[p]}*`) : ''))
   }
   if (placeKeys.length > 1) {
-    return joinText(placesStr, ', ', ` ${t('and')} `)
+    return joinText(placesStr)
   } else if (placeKeys.length === 1) {
     return t('only-in') + ' ' + placeKeys[0]
   } else {
@@ -41,14 +41,14 @@ const _getPlacesString = props => {
   }
 }
 
-const _getReplacedPlacesString = props => {
+const getReplacedPlacesString = props => {
   const replaceFn = (match, index) => <strong key={index}>{match}</strong>
-  return reactStringReplace(_getPlacesString(props), /\*([^\*]+)\*/g, replaceFn) // eslint-disable-line no-useless-escape
+  return reactStringReplace(getPlacesString(props), /\*([^\*]+)\*/g, replaceFn) // eslint-disable-line no-useless-escape
 }
 
 const GamePlaces = props => (
   <p className='places'>
-    {t('released')} {_getReplacedPlacesString(props)}
+    {t('released')} {getReplacedPlacesString(props)}
   </p>
 )
 
