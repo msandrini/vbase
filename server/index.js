@@ -1,20 +1,12 @@
-// import path from 'path'
-// import fs from 'fs'
+const path = require('path')
+const fsp = require('fs').promises
 
-// TODO take index.html and replace £ with lang
-// TODO readequate JS files onto script tags
-
-const index = (response, lang) => {
+const index = async (response, lang) => {
   const langHtml = lang === 'pt-br' ? 'pt-BR' : lang
-  const html = `<!doctype html><html lang="${langHtml}"><head>` +
-                '<meta name="viewport" content="width=device-width, initial-scale=1">' +
-                '<title>VBase</title></head><body>' +
-                '<div id="app"></div>' +
-                `<script type="text/javascript">window.lang = '${lang}'</script>` +
-                '<script type="text/javascript" src="/jsbundles/vendor.js"></script>' +
-                '<script type="text/javascript" src="/jsbundles/app.js"></script>' +
-                '</body></html>'
-  response.status(200).type('html').send(html)
+  const thisPath = path.resolve(__dirname, '../dist/index.html')
+  const html = await fsp.readFile(thisPath)
+  const replacedHtml = html.replace(/lang="en"/g, `lang="${langHtml}"`)
+  response.status(200).type('html').send(replacedHtml)
 }
 
-export default index
+module.exports = index

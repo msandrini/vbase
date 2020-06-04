@@ -1,4 +1,4 @@
-import { SEARCH } from '../constants'
+import { SEARCH } from '../utils/constants'
 
 const initialState = {
   advancedVisible: false,
@@ -7,16 +7,7 @@ const initialState = {
 
 const searchReducer = (state = initialState, action) => {
   switch (action.type) {
-    case SEARCH.RESETFIELDREQUESTED:
-      return { ...state, fieldValueSimple: '' }
-
-    case SEARCH.TOGGLEADVANCED:
-      return { ...state, advancedVisible: !state.advancedVisible }
-
-    case SEARCH.CHANGEDSIMPLE:
-      return { ...state, fieldValueSimple: action.value }
-
-      // case SEARCH.SUBMITTEDSIMPLE - triggers saga
+    // case SEARCH.SUBMITTEDSIMPLE - triggers saga
 
     case SEARCH.SUBMITTEDADVANCED:
       return { ...state, advancedVisible: false }

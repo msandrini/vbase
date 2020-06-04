@@ -1,10 +1,11 @@
 import React from 'react'
 
-import { getFilledArray } from '../../../utils'
-import { IMAGEGAME_URL } from '../../../constants'
-import Icon from '../../shared/icon.jsx'
-import t from '../../../i18n'
-import './picture.styl'
+import { IMAGEGAME_URL } from '../../../utils/constants'
+import Icon from '../../shared/Icon'
+import t from '../../../utils/i18n'
+import './Picture.styl'
+
+const getFilledArray = quantity => new Array(quantity + 1).join('-').split('')
 
 const GamePicture = props => (
   <figure>

@@ -1,24 +1,26 @@
 import React from 'react'
-import { Link } from 'react-router'
-import { _getLink as gameLinkStr } from '../../results/game-link.jsx'
 
-import t from '../../../i18n'
-import Icon from '../../shared/icon.jsx'
-import './series.styl'
+import Icon from '../../shared/Icon'
+import TLink from '../../shared/TLink'
+import InfoLink from '../../shared/InfoLink'
+import t from '../../../utils/i18n'
+import './Series.styl'
+
+export const getLinkObj = id => ({ key: 'game', rest: id })
 
 const _getLink = (game, currentGameId) => (
   <li key={game._id}>
     {game._id !== currentGameId ? (
-      <Link className='btn ball' to={gameLinkStr(game._id)}>
+      <TLink className='btn ball' to={getLinkObj(game._id)}>
         <Icon type='next' size='10' />
-      </Link>
+      </TLink>
     ) : (
       <span className='ball'>
         <Icon type='check' size='10' />
       </span>
     )}
     {game._id !== currentGameId ? (
-      <Link to={gameLinkStr(game._id)}>{game.title}</Link>
+      <TLink to={getLinkObj(game._id)}>{game.title}</TLink>
     ) : (
       <span>{game.title}</span>
     )}
@@ -31,13 +33,9 @@ const GameSeries = ({ series, seriesGames, currentGameId }) => (
       <h6>
         {t('series')}
         {series.map(s => (
-          <Link
-            key={s.id}
-            className='info-link'
-            to={`/${t('url__info')}/${t('url__series')}/${s.id}`}
-          >
+          <InfoLink key={s.id} infoKey='series' id={s.id}>
             {s.title}
-          </Link>
+          </InfoLink>
         ))}
         {series && seriesGames.total && (
           <small>

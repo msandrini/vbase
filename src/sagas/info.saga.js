@@ -1,7 +1,9 @@
 import { call, put } from 'redux-saga/effects'
-import { browserHistory } from 'react-router'
-import { INFO, API_URL } from '../constants'
-import { sendCall, warnOnNetworkError, createAction } from '../utils'
+
+import { sendCall, warnOnNetworkError } from '../utils/resources'
+import { createAction } from '../utils/store'
+
+import { INFO, API_URL } from '../utils/constants'
 
 const infoEffects = {
 
@@ -22,11 +24,6 @@ const infoEffects = {
       yield put(createAction(INFO.FAILEDLOADING)({ feedback: e }))
       warnOnNetworkError(e)
     }
-  },
-
-  triggerBack: function * (action) {
-    console.log(browserHistory)
-    browserHistory.goBack()
   }
 
 }

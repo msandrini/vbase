@@ -1,9 +1,11 @@
 import { call, put } from 'redux-saga/effects'
-import { browserHistory } from 'react-router'
-import { CONTACT, API_URL } from '../constants'
-import { sendCall, warnOnNetworkError, createAction } from '../utils'
 
-import t from '../i18n'
+import { sendCall, warnOnNetworkError } from '../utils/resources'
+import { createAction } from '../utils/store'
+import { historyTPush } from '../utils/history'
+
+import { CONTACT, API_URL } from '../utils/constants'
+import t from '../utils/i18n'
 
 const contactEffects = {
 
@@ -24,7 +26,7 @@ const contactEffects = {
 
   afterSent: function * (action) {
     window.alert(t('message-sent-successfully'))
-    browserHistory.push(`/${t('url__all-games')}`)
+    historyTPush({ key: 'all-games' })
   }
 
 }

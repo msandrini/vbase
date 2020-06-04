@@ -1,10 +1,12 @@
 import { call, put, select } from 'redux-saga/effects'
 import { delay } from 'redux-saga'
-import { browserHistory } from 'react-router'
-import { GAME, API_URL } from '../constants'
-import { sendCall, warnOnNetworkError, createAction } from '../utils'
+import { browserHistory } from 'react-router-dom'
 
-import t from '../i18n'
+import { sendCall, warnOnNetworkError } from '../utils/resources'
+import { createAction } from '../utils/store'
+
+import { GAME, API_URL } from '../utils/constants'
+import t from '../utils/i18n'
 
 const gameEffects = {
 
@@ -29,7 +31,7 @@ const gameEffects = {
         warnOnNetworkError(feedback)
       }
     } catch (e) {
-      if (e.toString().indexOf(404) !== -1) {
+      if (e.toString().indexOf('404') !== -1) {
         yield put(createAction(GAME.FAILEDLOADING)({ feedback: t('game-not-found') }))
       } else {
         yield put(createAction(GAME.FAILEDLOADING)({ feedback: e }))

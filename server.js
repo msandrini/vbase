@@ -11,7 +11,7 @@ routing(app)
 
 // final listener (http)
 app.listen(app.get('port'), () => {
-  console.log('Node app is running HTTP on port ' + app.get('port'))
+  console.log('Page-server app is running HTTP on port ' + app.get('port'))
 })
 
 process.on('uncaughtException', function (err) {

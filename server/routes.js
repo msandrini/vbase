@@ -1,30 +1,28 @@
-import locale from 'locale'
-import assets from './assets'
-import index from './index'
+const locale = require('locale')
+const assets = require('./assets')
+const index = require('./index')
 
 const LANG = { EN: 'en', BR: 'pt-BR' }
 
 const _getLocale = headers => {
   const supported = new locale.Locales(['en', 'pt'])
   const bestLocale = new locale.Locales(headers['accept-language']).best(supported).toString()
-  if (bestLocale.substr(0, 2) === 'pt') {
-    return 'br'
-  } else {
-    return 'en'
-  }
+  if (bestLocale.substr(0, 2) === 'pt') return LANG.BR
+  return LANG.EN
 }
 
-const routing = (app) => {
-  const defaultRoute = res => res.sendStatus(404)
+const outputLocale = (req, res) => res.json({ lang: _getLocale(req.headers) })
 
+const routing = (app) => {
   app
-    .get('/locale', (req, res) => res.json({ lang: _getLocale(req.headers) }))
+    .get('/locale', outputLocale)
 
   /* index pages (returns index.html) */
 
-  // TODO: / (root)
-
-  // TODO readequate files (JS, images, sitemap) to serve
+    .get('/?', (req, res) => {
+      const lang = _getLocale(req.headers)
+      res.redirect(lang === LANG.EN ? '/all-games' : '/todos-os-jogos')
+    })
 
     .get('/all-games(/*)?', (req, res) => index(res, LANG.EN))
     .get('/search/*', (req, res) => index(res, LANG.EN))
@@ -46,9 +44,9 @@ const routing = (app) => {
 
     .get('/images-gameplay/:code', (req, res) => assets.images.gameplay.list(res, req.params.code))
 
-  /* default route */
+  /* default route (404) */
 
-    .get('*', (req, res) => defaultRoute(res))
+    .get('*', (req, res) => res.sendStatus(404))
 }
 
 module.exports = routing

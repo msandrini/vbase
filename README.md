@@ -13,6 +13,10 @@ Run with `npm i` and `npm start` to run the app (FE) server
 
 - Run the API on `sitemap-generate` to generate the content and paste it on sitemap.xml
 
+### language (how do the app infers the language)
+
+- if no specific language-bound address, gets address from location lib
+- redirects (302) to a language-bound address
 
 ## run on production
 
@@ -25,7 +29,9 @@ Run `npm run build:prod`
 + Delete API server files
 + Upgrade all libs on package.json
 + Install/setup lint again
-- Modernize node.js server code
-- Make app run on Parcel.js
++ Modernize node.js server code
++ Make app run on Parcel.js
+- Install and run babel on build time
 - Test all app functionalities
 - Rewrite frontend code to adapt to Hooks (and less reducer actions too)
+- Support language change (localStorage)

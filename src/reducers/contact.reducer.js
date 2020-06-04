@@ -1,4 +1,4 @@
-import { CONTACT } from '../constants'
+import { CONTACT } from '../utils/constants'
 
 const initialState = {
   isLoading: false,
@@ -7,9 +7,6 @@ const initialState = {
 
 const contactReducer = (state = initialState, action) => {
   switch (action.type) {
-    case CONTACT.VALUECHANGED:
-      return { ...state, failed: false }
-
     case CONTACT.SUBMITTED:
       return { ...state, isLoading: true }
 

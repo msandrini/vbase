@@ -1,113 +1,85 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import { createAction, buildQueryString } from '../../utils'
-import { Link } from 'react-router'
-import { INFO, IMAGEINFO_URL } from '../../constants'
+import React, { useEffect } from 'react'
+import { connect, useSelector, useDispatch } from 'react-redux'
+import { useParams } from 'react-router'
 
-import PageTitle from '../shared/page-title.jsx'
-import Title from '../shared/title.jsx'
-import Icon from '../shared/icon.jsx'
+import PageTitle from '../shared/PageTitle'
+import Title from '../shared/Title'
+import Icon from '../shared/Icon'
+import TLink from '../shared/TLink'
 
-import t, { lang } from '../../i18n'
-import './info.styl'
+import { createAction } from '../../utils/store'
+import { INFO, IMAGEINFO_URL } from '../../utils/constants'
+import { goBack } from '../../utils/history'
+
+import t, { lang } from '../../utils/i18n'
+import './Info.styl'
 
 const keyToDbMapping = { genre: 'genres', addon: 'addons', series: 'series', company: 'companies' }
 
-const _getTitle = title => {
-  if (title) {
-    return (typeof title === 'string') ? title : title[lang]
-  } else {
-    return t('loading')
-  }
+const getTitle = title => {
+  if (title) return (typeof title === 'string') ? title : title[lang]
+  return t('loading')
 }
 
-const _getContent = content => {
-  if (typeof content === 'object' && content[lang]) {
-    return content[lang]
-  } else {
-    return <span className='no-content'>{t('no-content')}</span>
-  }
+const getContent = content => {
+  if (typeof content === 'object' && content[lang]) return content[lang]
+  return <span className='no-content'>{t('no-content')}</span>
 }
 
-const _getImageUrl = (subject, subjectKey) => {
-  return `${IMAGEINFO_URL}${keyToDbMapping[subject]}/${subjectKey}/1.png`
-}
+const getImageUrl = (subject, subjectKey) => 
+  `${IMAGEINFO_URL}${keyToDbMapping[subject]}/${subjectKey}/1.png`
 
-const _getLinkStr = (subject, title) => {
-  if (typeof title === 'object') title = title[lang]
+const getLinkStr = (subject, title) => {
+  const titleProcessed = (typeof title === 'object') ? title[lang] : title
   if (subject !== 'addon') {
-    const designation = t(`from-${subject}-x`, { replacements: [title] }).replace(/\*/g, '')
-    return `${t('list-games')} ${designation}`
-  } else {
-    return t('list-games-with-supporting-x', { replacements: title })
+    const designation = t(`from-${subject}-x`, { replacements: [titleProcessed] })
+    return `${t('list-games')} ${designation.replace(/\*/g, '')}`
   }
+  return t('list-games-with-supporting-x', { replacements: titleProcessed })
 }
 
-const _getLinkUrl = (subject, subjectKey) => {
-  const tempObject = {}
-  tempObject[subject + 'id'] = subjectKey
-  const query = buildQueryString(tempObject)
-  return `/${t('url__advanced-search')}?${query}`
+const getLinkObj = (subject, subjectKey) => {
+  const query = { [`${subject}id`]: subjectKey }
+  return { key: 'advanced-search', query }
 }
 
-class InfoPage extends Component {
-  constructor () {
-    super()
-    this.handleBackButtonClick = this.handleBackButtonClick.bind(this)
-  }
+const InfoPage = () => {
+  const { title, subject, subjectKey, content, imageExists } = useSelector(state => state.info)
+  const dispatch = useDispatch()
+  const params = useParams()
 
-  componentWillMount () {
-    this.props.requestAction(this.props.params)
-  }
+  const requestAction = createAction(INFO.CONTENTREQUESTED)
 
-  handleBackButtonClick () {
-    this.props.backAction()
-  }
+  useEffect(() => {
+    dispatch(requestAction(params))
+  }, [])
 
-  render () {
-    const { title, subject, subjectKey, content, imageExists } = this.props
-    return (
-      <div>
-        <PageTitle title={_getTitle(title) + ` (${subject && t(subject)})`} />
-        <Title main={_getTitle(title)} sub={subject && t(subject)} />
-        <div id='info'>
-          <div className='button-wrapper'>
-            <button className='ball' onClick={this.handleBackButtonClick} title={t('go-back')}>
-              <Icon size='22' type='prev' />
-            </button>
-          </div>
-          <figure className='ball'>
-            {imageExists && (
-              <div className='image-container'>
-                <img src={_getImageUrl(subject, subjectKey)} alt={title} />
-              </div>
-            )}
-          </figure>
-          <p>{title && _getContent(content)}</p>
-          <div className='links'>
-            <Link to={_getLinkUrl(subject, subjectKey)} className='see-also'>
-              {_getLinkStr(subject, title)}
-            </Link>
-          </div>
+  return (
+    <div>
+      <PageTitle title={getTitle(title) + ` (${subject && t(subject)})`} />
+      <Title main={getTitle(title)} sub={subject && t(subject)} />
+      <div id='info'>
+        <div className='button-wrapper'>
+          <button className='ball' onClick={() => goBack()} title={t('go-back')}>
+            <Icon size='22' type='prev' />
+          </button>
+        </div>
+        <figure className='ball'>
+          {imageExists && (
+            <div className='image-container'>
+              <img src={getImageUrl(subject, subjectKey)} alt={title} />
+            </div>
+          )}
+        </figure>
+        <p>{title && getContent(content)}</p>
+        <div className='links'>
+          <TLink to={getLinkObj(subject, subjectKey)} className='see-also'>
+            {getLinkStr(subject, title)}
+          </TLink>
         </div>
       </div>
-    )
-  }
+    </div>
+  )
 }
 
-const mapStateToProps = state => ({
-  isLoading: state.info.isLoading,
-  hasFailed: state.info.hasFailed,
-  subject: state.info.subject,
-  subjectKey: state.info.key,
-  title: state.info.title,
-  content: state.info.content,
-  imageExists: state.info.imageExists
-})
-
-const mapDispatchToProps = {
-  requestAction: createAction(INFO.CONTENTREQUESTED),
-  backAction: createAction(INFO.BACKREQUESTED)
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(InfoPage)
+export default InfoPage

@@ -1,6 +1,6 @@
 import React from 'react'
-import t from '../../i18n'
-import './scorebar.styl'
+import t from '../../utils/i18n'
+import './Scorebar.styl'
 
 const elements = [
   { score: 10, y: 6.257, x: 57.561 },

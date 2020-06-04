@@ -1,0 +1,70 @@
+@require './common.styl'
+
+.search
+	width calc(100% - 580px)
+	position absolute
+	pos 375px 67px
+	z-index 5
+	@media (max-width: 1024px)
+		width calc(100% - 380px)
+	@media (max-width: 890px)
+		width calc(100% - 450px)
+		.basic-search input
+			width calc(100% - 78px)
+	@media (max-width: 720px)
+		position static
+		margin-left 56px
+		width auto
+		.basic-search input
+			padding-left 20px
+	@media (max-width: 500px)
+		//width calc(100% - 20px)
+	@media (max-width: 400px)
+		//width calc(100% - 60px)
+		.basic-search input
+			width calc(100% - 45px)
+			padding-right 20px
+
+.basic-search
+	position relative
+	input
+		width 70%
+		font-size 24px
+		padding 8px 40px 8px 0
+		border 0
+		color white
+		background transparent
+		appearance none
+		border-bottom 3px solid c-light
+		&:focus
+			outline none
+			border-bottom-color #FFF
+			& + button
+				background white
+	button
+		border 0
+		position relative
+		pos -20px 27px
+		size 40px 40px
+		padding 2px
+		svg
+			flip()
+	.trigger-advanced
+		position absolute
+		font-size 12px
+		display block
+		color c-medium
+		trans .3s
+		cursor pointer
+		text-transform lowercase
+		svg
+			margin-left 5px
+			fill c-medium
+			trans .3s
+		&:hover
+			color white
+			svg
+				opacity 1
+
+		@media (max-width: 720px)
+			margin-left 20px

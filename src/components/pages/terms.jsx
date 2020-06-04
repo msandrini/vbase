@@ -1,8 +1,8 @@
 import React from 'react'
-import PageTitle from '../shared/page-title.jsx'
-import Title from '../shared/title.jsx'
+import PageTitle from '../shared/PageTitle'
+import Title from '../shared/Title'
 
-import t from '../../i18n'
+import t from '../../utils/i18n'
 
 const address = document.location.origin
 

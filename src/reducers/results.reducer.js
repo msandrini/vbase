@@ -1,4 +1,4 @@
-import { RESULTS } from '../constants'
+import { RESULTS } from '../utils/constants'
 
 const initialState = {
   isLoading: false,

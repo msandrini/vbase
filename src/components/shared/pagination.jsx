@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 
-import './pagination.styl'
-import t from '../../i18n'
-import Icon from './icon.jsx'
-import SelectBox from './select-box.jsx'
+import './Pagination.styl'
+import t from '../../utils/i18n'
+import Icon from './Icon'
+import SelectBox from './SelectBox'
 
-import { ITEMS_PER_PAGE } from '../../constants'
+import { ITEMS_PER_PAGE } from '../../utils/constants'
 
 class Pagination extends Component {
   constructor (props) {

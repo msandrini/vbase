@@ -1,80 +1,98 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
+import React, { useReducer, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { produce } from 'immer'
 
-import PageTitle from '../shared/page-title.jsx'
-import Title from '../shared/title.jsx'
-import Icon from '../shared/icon.jsx'
-import Spinner from '../shared/spinner.jsx'
-import { CONTACT } from '../../constants'
-import { createAction } from '../../utils'
+import PageTitle from '../shared/PageTitle'
+import Title from '../shared/Title'
+import Icon from '../shared/Icon'
+import Spinner from '../shared/Spinner'
+import { CONTACT } from '../../utils/constants'
+import { createAction } from '../../utils/store'
 
-import t from '../../i18n'
-import './contact.styl'
+import t from '../../utils/i18n'
+import './Contact.styl'
 
-class ContactPage extends Component {
-  constructor (props) {
-    super(props)
-    this.handleSubmitForm = this.handleSubmitForm.bind(this)
-    this.handleChangeValue = this.handleChangeValue.bind(this)
+const initialInternalState = {
+  name: '',
+  email: '',
+  message: ''
+}
+
+const internalReducer = produce((draft, action) => {
+  switch (action.type) {
+    case 'CHANGE':
+      draft[action.field] = action.value
   }
+})
 
-  handleSubmitForm (ev) {
+const ContactPage = () => {
+  const [internalState, internalDispatch] = useReducer(internalReducer, initialInternalState)
+  const { isLoading, failed } = useSelector(state => state.contact)
+  const dispatch = useDispatch()
+
+  const submitAction = createAction(CONTACT.SUBMITTED)
+  const failAction = createAction(CONTACT.FAILED)
+
+  const handleSubmitForm = (ev) => {
     ev.preventDefault()
-    const el = ev.target.elements
-    const fields = {
-      name: el.name.value,
-      email: el.email.value,
-      message: el.message.value
-    }
-    if (fields.name && fields.email && fields.message) {
-      this.props.submitAction({ fields })
+    if ((internalState.name || internalState.email) && internalState.message) {
+      dispatch(submitAction({ fields: internalState }))
     } else {
       let failMessage
-      if (!fields.name) {
-        failMessage = t('filling-name-required')
-      } else if (!fields.email) {
-        failMessage = t('filling-email-required')
-      } else if (!fields.message) {
+      if (!internalState.name && !internalState.email) {
+        failMessage = t('filling-email-required') // TODO new translation key
+      } else if (!internalState.message) {
         failMessage = t('filling-message-required')
       }
-      this.props.failAction({ message: failMessage })
+      dispatch(failAction({ message: failMessage }))
     }
     document.getElementById('contact-form').reset()
   }
 
-  handleChangeValue () {
-    this.props.changedValueAction()
+  const handleChangeValue = field => ev => {
+    internalDispatch({ type: 'CHANGE', field, value: ev.target.value })
   }
 
-  render () {
-    return (
-      <div>
-        <PageTitle title={t('contact-us')} />
-        <Title main={t('contact-us')} />
-        <form id='contact-form' onSubmit={this.handleSubmitForm}>
-          <input type='email' autoComplete='off' name='email' required placeholder={t('e-mail')} onChange={this.handleChangeValue} />
-          <input type='text' autoComplete='off' name='name' required placeholder={t('name')} onChange={this.handleChangeValue} />
-          <textarea autoComplete='off' name='message' required placeholder={t('message')} onChange={this.handleChangeValue} />
-          <div className='button-wrapper'>
-            {this.props.failed && <div className='failure-message'>{this.props.failed}</div>}
-            {this.props.isLoading ? <Spinner />
-              : <button className='btn ball' title={t('send')}><Icon type='check' size='28' /></button>}
-          </div>
-        </form>
-      </div>
-    )
-  }
+  return (
+    <div>
+      <PageTitle title={t('contact-us')} />
+      <Title main={t('contact-us')} />
+      <form id='contact-form' onSubmit={handleSubmitForm}>
+        <input
+          type='email'
+          name='email'
+          required
+          placeholder={t('e-mail')}
+          onChange={handleChangeValue('email')}
+        />
+        <input
+          type='text'
+          name='name'
+          required
+          placeholder={t('name')}
+          onChange={handleChangeValue('name')}
+        />
+        <textarea
+          name='message'
+          required
+          placeholder={t('message')}
+          onChange={handleChangeValue('message')}
+        />
+        <div className='button-wrapper'>
+          {failed && (
+            <div className='failure-message'>{failed}</div>
+          )}
+          {isLoading ? (
+            <Spinner />
+          ) : (
+            <button className='btn ball' title={t('send')}>
+              <Icon type='check' size='28' />
+            </button>
+          )}
+        </div>
+      </form>
+    </div>
+  )
 }
 
-const mapStateToProps = state => ({
-  isLoading: state.contact.isLoading,
-  failed: state.contact.failed
-})
-
-const mapDispatchToProps = {
-  submitAction: createAction(CONTACT.SUBMITTED),
-  failAction: createAction(CONTACT.FAILED),
-  changedValueAction: createAction(CONTACT.VALUECHANGED)
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(ContactPage)
+export default ContactPage

@@ -1,4 +1,4 @@
-import { USERINPUT } from '../constants'
+import { USERINPUT } from '../utils/constants'
 
 const initialState = {
   overlayVisible: false,

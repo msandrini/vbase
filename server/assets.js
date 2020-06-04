@@ -1,25 +1,16 @@
-import path from 'path'
-import fs from 'fs'
+const path = require('path')
+const fsp = require('fs').promises
 
 const gameIdIsValid = id => /[a-z0-9-]+/.test(String(id))
 
 const assets = {
   images: {
     gameplay: {
-      list: (response, code) => {
+      list: async (response, code) => {
         if (gameIdIsValid(code)) {
-          let counter = 0
-          let lastFileFound = false
-          while (!lastFileFound) {
-            const imgPath = path.join(__dirname, `../static/images/games/gameplay/${code}/${(counter + 1)}.png`)
-            const fileExists = fs.existsSync(imgPath)
-            if (fileExists) {
-              counter++
-            } else {
-              lastFileFound = true
-            }
-          }
-          response.json({ images: counter })
+          const thisPath = path.join(__dirname, `../static/images/games/gameplay/${code}`)
+          const dir = await fsp.readdir(thisPath)
+          response.json({ images: dir.length })
         } else {
           response.sendStatus(404)
         }
@@ -28,4 +19,4 @@ const assets = {
   }
 }
 
-export default assets
+module.exports = assets

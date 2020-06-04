@@ -1,4 +1,4 @@
-import { INFO } from '../constants'
+import { INFO } from '../utils/constants'
 
 const initialState = {
   isLoading: false,

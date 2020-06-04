@@ -1,7 +1,7 @@
 import React from 'react'
-import Icon from '../shared/icon.jsx'
+import Icon from '../shared/Icon'
 
-import './logo.styl'
+import './Logo.styl'
 
 const Logo = () => (
   <h1 id='logo'>

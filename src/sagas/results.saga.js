@@ -1,8 +1,12 @@
 import { call, put } from 'redux-saga/effects'
-import { browserHistory } from 'react-router'
-import { RESULTS, API_URL } from '../constants'
-import t, { lang } from '../i18n'
-import { sendCall, warnOnNetworkError, createAction, historyPush, buildQueryString } from '../utils'
+import produce from 'immer'
+
+import { sendCall, warnOnNetworkError } from '../utils/resources'
+import { createAction } from '../utils/store'
+import { historyTPush } from '../utils/history'
+
+import { RESULTS, API_URL } from '../utils/constants'
+import { lang } from '../utils/i18n'
 
 const _getCallName = (action) => {
   let page = 1
@@ -50,26 +54,24 @@ const resultsEffects = {
 
   requestPage: function * (action) {
     const page = parseInt(action.page, 10)
-    let url
-    if (action.query && Object.keys(action.query).length) {
-      const queryObj = { ...action.query }
-      delete queryObj.page
-      delete queryObj.scores
-      delete queryObj.sizes
-      delete queryObj.years
-      const queryString = buildQueryString(queryObj)
-      url = `${t('url__advanced-search')}?${queryString}&page=${page}`
-    } else if (action.params.names) {
-      const query = encodeURIComponent(action.params.names)
-      url = `${t('url__search')}/${query}/${page}`
-    } else {
-      url = `${t('url__all-games')}/${page}`
+    const getUrlArgs = () => {
+      if (action.query && Object.keys(action.query).length) {
+        const query = produce(action.query, draft => {
+          delete draft.page
+          delete draft.scores
+          delete draft.sizes
+          delete draft.years
+          draft.page = page
+        })
+        return { key: 'advanced-search', query }
+      }
+      if (action.params.names) {
+        const query = encodeURIComponent(action.params.names)
+        return { key: 'search', rest: `${query}/${page}` }
+      }
+      return { key: 'all-games', rest: page }
     }
-    historyPush(`/${url}`)
-  },
-
-  triggerBack: function * (action) {
-    browserHistory.goBack()
+    historyTPush(getUrlArgs())
   }
 
 }

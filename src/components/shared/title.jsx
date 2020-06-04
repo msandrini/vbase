@@ -1,7 +1,7 @@
 import React from 'react'
 import reactStringReplace from 'react-string-replace'
 
-import './title.styl'
+import './Title.styl'
 
 const _processTitle = title => {
   if (typeof title === 'string' && title.indexOf('*')) {

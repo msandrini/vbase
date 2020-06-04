@@ -1,8 +1,8 @@
 import React from 'react'
-import { Link } from 'react-router'
 
-import t, { lang } from '../../../i18n'
-import './genres.styl'
+import InfoLink from '../../shared/InfoLink'
+import t, { lang } from '../../../utils/i18n'
+import './Genres.styl'
 
 const GameGenres = props => (
   <div className='genres'>
@@ -11,9 +11,9 @@ const GameGenres = props => (
       <small>{t('none-registered')}</small>
     )}
     {props.genres.map(g => g && g.id && (
-      <Link className='info-link' to={`/${t('url__info')}/${t('url__genre')}/${g.id}`} key={g.id}>
+      <InfoLink id={g.id} infoKey='genre' key={g.id}>
         {g.title[lang]}
-      </Link>
+      </InfoLink>
     ))}
   </div>
 )

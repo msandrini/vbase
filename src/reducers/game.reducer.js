@@ -1,4 +1,4 @@
-import { GAME } from '../constants'
+import { GAME } from '../utils/constants'
 
 const initialState = {
   isLoading: false,

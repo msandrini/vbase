@@ -1,8 +1,7 @@
 import { put } from 'redux-saga/effects'
-import { SEARCH } from '../constants'
-import { createAction, historyPush, buildQueryString } from '../utils'
-
-import t from '../i18n'
+import { SEARCH } from '../utils/constants'
+import { createAction } from '../utils/store'
+import { historyTPush } from '../utils/history'
 
 const filterForUrl = str => encodeURIComponent(str)
 
@@ -14,12 +13,11 @@ const searchEffects = {
 
   simple: function * (action) {
     const value = filterForUrl(action.value)
-    historyPush(`/${t('url__search')}/${value}`)
+    historyTPush({ key: 'search', rest: `${value}` })
   },
 
   advanced: function * (action) {
-    const query = buildQueryString(action.data)
-    historyPush(`/${t('url__advanced-search')}?${query}`)
+    historyTPush({ key: 'advanced-search', query: action.data })
   }
 
 }
