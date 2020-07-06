@@ -13,9 +13,11 @@ import AllIcons from './AllIcons'
 import t from '../utils/i18n'
 import './AppWrapper.styl'
 
+const tURL = (key) => '/' + t(`url__${key}`)
+
 /* Router mapping */
 window.onpopstate = () => {
-  if (window.location.pathname === '/' + t('url__other-language-root')) {
+  if (window.location.pathname === tURL('other-language-root')) {
     document.location.reload()
   }
 }
@@ -27,14 +29,14 @@ const AppWrapper = () => (
       <Header />
       <div className='pages'>
         <Switch>
-          <Redirect from='/' to={t('url__all-games')} />
-          <Route path={t('url__all-games') + '(/:page)'} component={ResultsPage} />
-          <Route path={t('url__search') + '/:names(/:page)'} component={ResultsPage} />
-          <Route path={t('url__advanced-search') + '(/:page)'} component={ResultsPage} />
-          <Route path={t('url__game') + '/:game'} component={GamePage} />
-          <Route path={t('url__info') + '/:subject/:key'} component={InfoPage} />
-          <Route path={t('url__terms-privacy')} component={TermsPage} />
-          <Route path={t('url__contact')} component={ContactPage} />
+          <Redirect exact from='/' to={tURL('all-games')} />
+          <Route path={tURL('all-games') + '/:page?'}><ResultsPage /></Route>
+          <Route path={tURL('search') + '/:names/:page?'}><ResultsPage /></Route>
+          <Route path={tURL('advanced-search') + '/:page?'}><ResultsPage /></Route>
+          <Route path={tURL('game') + '/:game'}><GamePage /></Route>
+          <Route path={tURL('info') + '/:subject/:key'}><InfoPage /></Route>
+          <Route path={tURL('terms-privacy')}><TermsPage /></Route>
+          <Route path={tURL('contact')}><ContactPage /></Route>
         </Switch>
       </div>
       <Footer />

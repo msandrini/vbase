@@ -1,6 +1,6 @@
 const locale = require('locale')
 const assets = require('./assets')
-const index = require('./index')
+const serveIndex = require('./index')
 
 const LANG = { EN: 'en', BR: 'pt-BR' }
 
@@ -24,21 +24,22 @@ const routing = (app) => {
       res.redirect(lang === LANG.EN ? '/all-games' : '/todos-os-jogos')
     })
 
-    .get('/all-games(/*)?', (req, res) => index(res, LANG.EN))
-    .get('/search/*', (req, res) => index(res, LANG.EN))
-    .get('/advanced-search(/*)?', (req, res) => index(res, LANG.EN))
-    .get('/game/*', (req, res) => index(res, LANG.EN))
-    .get('/info/*', (req, res) => index(res, LANG.EN))
-    .get('/terms-privacy', (req, res) => index(res, LANG.EN))
-    .get('/contact', (req, res) => index(res, LANG.EN))
+    // (req, res) => index(res, LANG.EN)
+    .get('/all-games(/*)?', serveIndex(LANG.EN))
+    .get('/search/*', serveIndex(LANG.EN))
+    .get('/advanced-search(/*)?', serveIndex(LANG.EN))
+    .get('/game/*', serveIndex(LANG.EN))
+    .get('/info/*', serveIndex(LANG.EN))
+    .get('/terms-privacy', serveIndex(LANG.EN))
+    .get('/contact', serveIndex(LANG.EN))
 
-    .get('/todos-os-jogos(/*)?', (req, res) => index(res, LANG.BR))
-    .get('/busca/*', (req, res) => index(res, LANG.BR))
-    .get('/busca-avancada(/*)?', (req, res) => index(res, LANG.BR))
-    .get('/jogo/*', (req, res) => index(res, LANG.BR))
-    .get('/informacao/*', (req, res) => index(res, LANG.BR))
-    .get('/termos-privacidade', (req, res) => index(res, LANG.BR))
-    .get('/contato', (req, res) => index(res, LANG.BR))
+    .get('/todos-os-jogos(/*)?', serveIndex(LANG.BR))
+    .get('/busca/*', serveIndex(LANG.BR))
+    .get('/busca-avancada(/*)?', serveIndex(LANG.BR))
+    .get('/jogo/*', serveIndex(LANG.BR))
+    .get('/informacao/*', serveIndex(LANG.BR))
+    .get('/termos-privacidade', serveIndex(LANG.BR))
+    .get('/contato', serveIndex(LANG.BR))
 
   /* assets (number of gameplay images per game) */
 

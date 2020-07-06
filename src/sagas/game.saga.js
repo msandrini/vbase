@@ -1,5 +1,4 @@
 import { call, put, select } from 'redux-saga/effects'
-import { delay } from 'redux-saga'
 import { browserHistory } from 'react-router-dom'
 
 import { sendCall, warnOnNetworkError } from '../utils/resources'
@@ -15,13 +14,11 @@ const gameEffects = {
       const feedback = yield call(sendCall, API_URL + 'game-entry/' + action.id)
       if (feedback.status === 200) {
         yield put(createAction(GAME.INFORETRIEVED)({ info: feedback.data }))
+        // Get number of images
+        // const feedbackImg = yield call(sendCall, API_URL + 'images-gameplay/' + action.id)
+        // yield put(createAction(GAME.IMAGELISTRETRIEVED)({ images: feedbackImg.data.images }))
         if (feedback.data.series && feedback.data.series.length) {
-          // Get number of images
-          yield call(delay, 200)
-          const feedbackImg = yield call(sendCall, API_URL + 'images-gameplay/' + action.id)
-          yield put(createAction(GAME.IMAGELISTRETRIEVED)({ images: feedbackImg.data.images }))
           // Get related games (series)
-          yield call(delay, 200)
           const seriesIds = feedback.data.series.map(s => s.id)
           const feedbackSeries = yield call(sendCall, API_URL + 'games/from-series/' + seriesIds.join(','))
           yield put(createAction(GAME.RELATEDGAMESRETRIEVED)({ info: feedbackSeries.data }))

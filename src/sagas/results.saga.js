@@ -12,10 +12,11 @@ const getCallName = (action) => {
   let page = 1
   if (action.params.page && !isNaN(parseInt(action.params.page, 10))) {
     page = action.params.page
-  } else if (action.query.page && !isNaN(parseInt(action.query.page, 10))) {
-    page = action.query.page
   }
-  const isQueryEmpty = Object.keys(action.query).length === 0
+  // else if (action.query.page && !isNaN(parseInt(action.query.page, 10))) {
+  //   page = action.query.page
+  // }
+  const isQueryEmpty = !!action.query && Object.keys(action.query).length === 0
   if (action.params.names) {
     const query = encodeURIComponent(action.params.names)
     return `${API_URL}games/by-names/${query}/${page}`

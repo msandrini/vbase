@@ -15,13 +15,13 @@ const GamePicture = ({ total, gameId }) => {
 
   const renderImageTags = () => {
     const imageTags = []
-    for (let i = 0; i <= total; i++) {
+    for (let i = 0; i < total; i++) {
       imageTags.push(
         <img
           key={i}
           src={`${IMAGEGAME_URL}${gameId}/${i + 1}.png`}
           alt={t('image-of-the-gameplay') + ` #${i}`}
-          className={index === (i + 1) ? 'chosen' : ''}
+          className={index === i ? 'chosen' : ''}
         />
       )
     }

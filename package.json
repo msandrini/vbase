@@ -13,6 +13,7 @@
     "@babel/preset-env": "^7.10.2",
     "@babel/preset-react": "^7.10.1",
     "parcel-bundler": "^1.12.4",
+    "parcel-plugin-static-files-copy": "^2.4.3",
     "standard": "^14.3.4",
     "stylus": "^0.54.7"
   },
@@ -21,6 +22,7 @@
     "express": "^4.17.1",
     "immer": "^6.0.9",
     "locale": "^0.1.0",
+    "qs": "^6.9.4",
     "rc-slider": "^9.3.0",
     "react": "^16.13.1",
     "react-document-title": "^2.0.3",
@@ -38,5 +40,12 @@
     "lint": "standard",
     "dev": "parcel index.html",
     "build": "parcel build index.html"
+  },
+  "staticFiles": {
+    "staticPath": [
+      { "staticPath": "static/images/addons", "staticOutDir": "static/images/addons" },
+      { "staticPath": "static/images/companies", "staticOutDir": "static/images/companies" },
+      { "staticPath": "static/images/games/gameplay", "staticOutDir": "static/images/games/gameplay" }
+    ]
   }
 }

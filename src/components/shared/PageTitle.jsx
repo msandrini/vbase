@@ -1,5 +1,4 @@
-import React from 'react'
-import DocumentTitle from 'react-document-title'
+import { useEffect } from 'react'
 import { DOCUMENT_TITLE, DOCUMENT_TITLE_SEPARATOR } from '../../utils/constants'
 
 const getTitle = dynamicPart => {
@@ -8,6 +7,13 @@ const getTitle = dynamicPart => {
   return `${firstLetter}${rest} ${DOCUMENT_TITLE_SEPARATOR} ${DOCUMENT_TITLE}`
 }
 
-const PageTitle = ({ title }) => <DocumentTitle title={getTitle(title)} />
+const PageTitle = ({ title }) => {
+  useEffect(() => {
+    const newTitle = getTitle(title)
+    document.title = newTitle
+  }, [title])
+
+  return null
+}
 
 export default PageTitle

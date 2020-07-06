@@ -62,4 +62,6 @@ const _replacer = (string, replacements) => {
   })
 }
 
+export const lang = window.lang
+
 export default i18n

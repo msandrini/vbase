@@ -50,9 +50,8 @@
 				left 0
 				height 3px
 				background-color c-light
-			&-handle
+			&-handle, &-handle-click-focused
 				position absolute
-				margin-left -7px
 				margin-top -5px
 				width 14px
 				height 14px
@@ -60,6 +59,7 @@
 				border-radius 50%
 				border solid 3px c-light
 				background-color c-light
+				outline none
 				&:hover
 					transform scale(1.1, 1.1)
 				&-active
@@ -87,11 +87,10 @@
 			&-active
 				color #666
 
-	textarea
+	textarea, input[type=text]
 		display block
 		float left
 		width calc(80% - 80px)
-		height 150px
 		background rgba(c-dark3, 40%)
 		padding 5px 9px
 		font-size 16px
@@ -101,6 +100,8 @@
 		&:focus
 			outline none
 			background rgba(c-dark3, 80%)
+	textarea
+		height 150px
 	
 	.button-wrapper
 		position relative

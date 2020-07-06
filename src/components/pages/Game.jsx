@@ -71,19 +71,14 @@ const renderOtherNames = (otherNames) => {
 }
 
 const GamePage = () => {
-  const {
-    isLoading,
-    hasFailed,
-    info: game,
-    gameId,
-    seriesGames,
-    images
-  } = useSelector(state => state.game)
+  const gameState = useSelector(state => state.game); console.log(gameState.images)
   const dispatch = useDispatch()
   const params = useParams()
 
   const requestAction = createAction(GAME.REQUESTEDINFO)
   const failedAction = createAction(GAME.FAILEDONURL)
+
+  const gameId = params.game
 
   const getGameInfo = () => {
     const gameIdIsOk = /[a-z0-9-]+/.test(gameId)
@@ -94,10 +89,9 @@ const GamePage = () => {
     }
   }
 
-  // useEffect(getGameInfo, []) not sure if this is necessary
   useEffect(getGameInfo, [params.game])
 
-  if (isLoading) {
+  if (gameState.isLoading) {
     return (
       <>
         <Title main={t('loading-game-info')} />
@@ -105,14 +99,15 @@ const GamePage = () => {
       </>
     )
   }
-  if (hasFailed) {
+  if (gameState.hasFailed) {
     return (
       <>
         <Title main={t('error')} />
-        <FailureMessage message={hasFailed} />
+        <FailureMessage message={gameState.hasFailed} />
       </>
     )
   }
+  const { info: game, seriesGames, images } = gameState
   if (game && game.title) {
     return (
       <div>
@@ -128,7 +123,7 @@ const GamePage = () => {
             <GameEditorScore score={game.editorScore} />
             <GameUserScore reviews={game.userReviews} />
             <GameEditorReview editorReview={game.editorReview} />
-            <GameUserReviews userReviews={game.userReviews} gameId={this.props.gameId} />
+            <GameUserReviews userReviews={game.userReviews} gameId={gameId} />
           </div>
           <div className='outer-box'>
             <GameBasicInfo year={game.year} companies={game.companies} />

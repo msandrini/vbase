@@ -1,7 +1,7 @@
-export const BASE_URL = 'https://vbase.games/'
-export const API_URL = BASE_URL + 'api/'
-export const IMAGEGAME_URL = BASE_URL + 'image-gameplay/'
-export const IMAGEINFO_URL = BASE_URL + 'image-info/'
+export const BASE_URL = 'https://vbase-api.vercel.app/'
+export const API_URL = BASE_URL // + 'api/'
+export const IMAGEGAME_URL = '/static/images/games/gameplay/'
+export const IMAGEINFO_URL = '/static/images/addons/'
 export const ITEMS_PER_PAGE = 20
 export const DOCUMENT_TITLE = 'VBase'
 export const DOCUMENT_TITLE_SEPARATOR = '-'

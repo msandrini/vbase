@@ -44,7 +44,7 @@ const getLinkObj = (subject, subjectKey) => {
 }
 
 const InfoPage = () => {
-  const { title, subject, subjectKey, content, imageExists } = useSelector(state => state.info)
+  const info = useSelector(state => state.info)
   const dispatch = useDispatch()
   const params = useParams()
 
@@ -54,6 +54,7 @@ const InfoPage = () => {
     dispatch(requestAction(params))
   }, [])
 
+  const { title, subject, key: subjectKey, content, imageExists } = info
   return (
     <div>
       <PageTitle title={getTitle(title) + ` (${subject && t(subject)})`} />

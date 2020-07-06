@@ -86,6 +86,8 @@
 	"not-applicable":"not applicable",
 	"not-scored":"not scored",
 	"optional":"(optional)",
+	"legacy-review":"(legacy review)",
+	"anonymous":"(anonymous)",
 
 	"prototype":"prototype",
 	"unlicensed":"unlicensed game",

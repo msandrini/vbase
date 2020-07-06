@@ -9,22 +9,21 @@ import userInputEffects from './user-input.saga'
 import { RESULTS, CONTACT, GAME, INFO, USERINPUT } from '../utils/constants'
 
 const rootSaga = function * () {
-  yield [
-    takeLatest(RESULTS.REQUESTED, resultsEffects.request),
-    takeLatest(RESULTS.PAGEREQUESTED, resultsEffects.requestPage),
+  yield takeLatest(RESULTS.REQUESTED, resultsEffects.request)
+  yield takeLatest(RESULTS.REQUESTED, resultsEffects.request)
+  yield takeLatest(RESULTS.PAGEREQUESTED, resultsEffects.requestPage)
 
-    takeLatest(CONTACT.SUBMITTED, contactEffects.send),
-    takeLatest(CONTACT.SENTSUCCESFULLY, contactEffects.afterSent),
+  yield takeLatest(CONTACT.SUBMITTED, contactEffects.send)
+  yield takeLatest(CONTACT.SENTSUCCESFULLY, contactEffects.afterSent)
 
-    takeLatest(GAME.REQUESTEDINFO, gameEffects.requestInfo),
-    takeLatest(GAME.FAILEDONURL, gameEffects.triggerBack),
-    takeLatest(GAME.CHANGEIMAGEREQUESTED, gameEffects.changeImage),
+  yield takeLatest(GAME.REQUESTEDINFO, gameEffects.requestInfo)
+  yield takeLatest(GAME.FAILEDONURL, gameEffects.triggerBack)
+  yield takeLatest(GAME.CHANGEIMAGEREQUESTED, gameEffects.changeImage)
 
-    takeLatest(INFO.CONTENTREQUESTED, infoEffects.requestContent),
+  yield takeLatest(INFO.CONTENTREQUESTED, infoEffects.requestContent)
 
-    takeLatest(USERINPUT.LISTREQUESTED, userInputEffects.getReviews),
-    takeLatest(USERINPUT.SUBMITTED, userInputEffects.submitNewReview)
-  ]
+  yield takeLatest(USERINPUT.LISTREQUESTED, userInputEffects.getReviews)
+  yield takeLatest(USERINPUT.SUBMITTED, userInputEffects.submitNewReview)
 }
 
 export default rootSaga

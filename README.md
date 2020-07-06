@@ -7,7 +7,7 @@ http://vbase.games
 
 After cloning the repo:
 
-Run with `npm i` and `npm start` to run the app (FE) server
+Run with `npm i`, `npm run build` and `npm start` to run the app (FE) server
 
 ### Misc maintenance items
 
@@ -33,5 +33,5 @@ Run `npm run build:prod`
 + Make app run on Parcel.js
 - Install and run babel on build time
 - Test all app functionalities
-- Rewrite frontend code to adapt to Hooks (and less reducer actions too)
 - Support language change (localStorage)
+- Rewrite frontend code to adapt to Hooks (and less reducer actions too)

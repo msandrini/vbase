@@ -43,12 +43,7 @@ const GameUserReviewForm = ({ gameId }) => {
       <h5>{t('review-this-game')}</h5>
       <div className='field user'>
         <label htmlFor='user'>{t('user')}</label>
-        <input
-          type='text'
-          placeholder={t('user')} // TODO verify this
-          name='user'
-          onChange={(e) => setUser(e.target.value)}
-        />
+        <input type='text' placeholder={t('optional')} name='user' onChange={(e) => setUser(e.target.value)} />
       </div>
       <div className='field score'>
         <label htmlFor='score'>{t('score')}:

@@ -1,18 +1,28 @@
 import React, { useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import GameUserReviewEntry from './overlay/Entry'
 import GameUserReviewForm from './overlay/Form'
 
 import Icon from '../../../shared/Icon'
 import t from '../../../../utils/i18n'
 import './Overlay.styl'
+import { USERINPUT } from '../../../../utils/constants'
+import { createAction } from '../../../../utils/store'
 
 const GameUserReviewsOverlay = ({ gameId, isVisible, onHide }) => {
-  const { reviews } = useSelector(state => state.userInput.reviews)
+  const dispatch = useDispatch()
+  const reviews = useSelector(state => state.userInput.reviews)
+  const isLoading = useSelector(state => state.userInput.isLoading)
+  const requestReviewsAction = createAction(USERINPUT.LISTREQUESTED)
 
   useEffect(() => {
     const classList = document.body.classList
-    isVisible ? classList.add('overlayed') : classList.remove('overlayed')
+    if (isVisible) {
+      classList.add('overlayed')
+      dispatch(requestReviewsAction({ gameId }))
+    } else {
+      classList.remove('overlayed')
+    }
   }, [isVisible])
 
   const handleCloseButtonClick = () => {
@@ -33,29 +43,33 @@ const GameUserReviewsOverlay = ({ gameId, isVisible, onHide }) => {
       className={isVisible ? '' : 'inactive'}
     >
       <div className='window'>
-        <a className='btn ball close' onClick={handleCloseButtonClick}>
-          <Icon type='x' size='24' />
-        </a>
-        <h5>{t('user-reviews-for-this-game')}
-          {reviews.length > 0 && (
-            <small>
-              {reviews.length + ' ' + t('review', { plural: reviews.length })}
-            </small>
-          )}
-        </h5>
-        {reviews.length > 0 && (
-          <ul>
-            {reviews.map((review, key) => (
-              <li key={key}>
-                <GameUserReviewEntry review={review} />
-              </li>
-            ))}
-          </ul>
+        {isLoading ? <h5>{t('loading')}</h5> : (
+          <>
+            <a className='btn ball close' onClick={handleCloseButtonClick}>
+              <Icon type='x' size='24' />
+            </a>
+            <h5>{t('user-reviews-for-this-game')}
+              {reviews.length > 0 && (
+                <small>
+                  {reviews.length + ' ' + t('review', { plural: reviews.length })}
+                </small>
+              )}
+            </h5>
+            {reviews.length > 0 && (
+              <ul>
+                {reviews.map((review, key) => (
+                  <li key={key}>
+                    <GameUserReviewEntry review={review} />
+                  </li>
+                ))}
+              </ul>
+            )}
+            {reviews.length === 0 && (
+              <div className='no-reviews'>{t('no-reviews')}</div>
+            )}
+            <GameUserReviewForm gameId={gameId} />
+          </>
         )}
-        {reviews.length === 0 && (
-          <div className='no-reviews'>{t('no-reviews')}</div>
-        )}
-        <GameUserReviewForm gameId={gameId} />
       </div>
     </div>
   )

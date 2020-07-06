@@ -5,10 +5,13 @@ import t, { lang } from '../../../../../utils/i18n'
 import Icon from '../../../../shared/Icon'
 import './Entry.styl'
 
-const getName = userInfo => {
-  if (!userInfo) return null
-  if (Array.isArray(userInfo.name)) return userInfo.name.join(' ')
-  return userInfo.name
+const getName = review => {
+  const getEntry = name => <>{t('by') + ': '}<strong>{name}</strong></>
+  if (typeof review.user === 'string') {
+    if (/([0-9a-f]){24}/.test(review.user)) return t('legacy-review')
+    return review.user ? getEntry(review.user) : t('anonymous')
+  }
+  return t('legacy-review')
 }
 
 const GameUserReviewEntry = ({ review }) => (
@@ -22,9 +25,7 @@ const GameUserReviewEntry = ({ review }) => (
       <strong>{review.score}</strong>
     </span>
     <div className='user'>
-      {t('by')}
-      {': '}
-      <strong>{getName(review.userInfo)}</strong>
+      {getName(review)}
     </div>
     <time dateTime={review.added}>
       {new Date(review.added).toLocaleDateString(t('date-locale'))}
