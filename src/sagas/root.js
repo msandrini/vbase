@@ -18,7 +18,6 @@ const rootSaga = function * () {
 
   yield takeLatest(GAME.REQUESTEDINFO, gameEffects.requestInfo)
   yield takeLatest(GAME.FAILEDONURL, gameEffects.triggerBack)
-  yield takeLatest(GAME.CHANGEIMAGEREQUESTED, gameEffects.changeImage)
 
   yield takeLatest(INFO.CONTENTREQUESTED, infoEffects.requestContent)
 
