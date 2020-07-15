@@ -1,38 +1,46 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 
 import Icon from '../../shared/Icon'
 
 import { IMAGEGAME_URL } from '../../../utils/constants'
 import t from '../../../utils/i18n'
 import './Picture.styl'
+import GamePictureImages from './picture/Images'
 
-const GamePicture = ({ total, gameId }) => {
+const GamePicture = ({ gameId }) => {
   const [index, setIndex] = useState(0)
+  const [availableImages, setAvailableImages] = useState(1)
 
-  const handleChangeImage = (increment) => {
-    setIndex(index => index + increment)
-  }
-
-  const renderImageTags = () => {
-    const imageTags = []
-    for (let i = 0; i < total; i++) {
-      imageTags.push(
-        <img
-          key={i}
-          src={`${IMAGEGAME_URL}${gameId}/${i + 1}.png`}
-          alt={t('image-of-the-gameplay') + ` #${i}`}
-          className={index === i ? 'chosen' : ''}
-        />
-      )
+  const tryLoadingImage = index => {
+    const url = `${IMAGEGAME_URL}${gameId}/${index}.png`
+    const img = new window.Image()
+    img.onload = () => {
+      tryLoadingImage(index + 1)
     }
-    return imageTags
+    img.onerror = () => {
+      if (index > 2) setAvailableImages(index - 1)
+    }
+    img.src = url
   }
 
-  return (
+  useEffect(() => {
+    tryLoadingImage(2)
+  }, [gameId])
+
+  const handleChangeImage = (increment) => () => {
+    setIndex(index => {
+      const nextIndex = index + increment
+      if (nextIndex < 0) return 0
+      if (nextIndex >= availableImages) return availableImages - 1
+      return nextIndex
+    })
+  }
+
+  return useMemo(() => (
     <figure>
       <span className='overlay' />
-      {renderImageTags()}
-      {(total > 1) && (
+      <GamePictureImages gameId={gameId} availableImages={availableImages} chosenIndex={index} />
+      {(availableImages > 1) && (
         <div className='controls'>
           <a className='ball btn prev' title={t('previous')} onClick={handleChangeImage(-1)}>
             <Icon size='14' type='prev' />
@@ -43,7 +51,7 @@ const GamePicture = ({ total, gameId }) => {
         </div>
       )}
     </figure>
-  )
+  ), [availableImages, gameId, index])
 }
 
 export default GamePicture

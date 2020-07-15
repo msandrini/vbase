@@ -5,9 +5,7 @@ const initialState = {
   hasFailed: false,
   gameId: null,
   seriesGames: {},
-  info: {},
-  images: 1,
-  currentImage: 1
+  info: {}
 }
 
 const contactReducer = (state = initialState, action) => {
@@ -25,14 +23,6 @@ const contactReducer = (state = initialState, action) => {
 
     case GAME.RELATEDGAMESRETRIEVED:
       return { ...state, seriesGames: action.info }
-
-    case GAME.IMAGELISTRETRIEVED:
-      return { ...state, images: action.images }
-
-      // case GAME.CHANGEIMAGEREQUESTED - only on saga
-
-    case GAME.IMAGECHANGED:
-      return { ...state, currentImage: action.newImage }
 
     default:
       return state

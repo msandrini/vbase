@@ -1,4 +1,4 @@
-import { call, put, select } from 'redux-saga/effects'
+import { call, put } from 'redux-saga/effects'
 import { browserHistory } from 'react-router-dom'
 
 import { sendCall, warnOnNetworkError } from '../utils/resources'
@@ -14,9 +14,6 @@ const gameEffects = {
       const feedback = yield call(sendCall, API_URL + 'game-entry/' + action.id)
       if (feedback.status === 200) {
         yield put(createAction(GAME.INFORETRIEVED)({ info: feedback.data }))
-        // Get number of images
-        // const feedbackImg = yield call(sendCall, API_URL + 'images-gameplay/' + action.id)
-        // yield put(createAction(GAME.IMAGELISTRETRIEVED)({ images: feedbackImg.data.images }))
         if (feedback.data.series && feedback.data.series.length) {
           // Get related games (series)
           const seriesIds = feedback.data.series.map(s => s.id)
@@ -40,20 +37,6 @@ const gameEffects = {
   triggerBack: function * (action) {
     window.alert(t('game-not-found'))
     browserHistory.goBack()
-  },
-
-  changeImage: function * (action) {
-    const { images, current } = yield select(state => ({
-      images: state.game.images,
-      current: state.game.currentImage
-    }))
-    let newImage = current + action.increment
-    if (newImage > images) {
-      newImage = 1
-    } else if (newImage === 0) {
-      newImage = images
-    }
-    yield put(createAction(GAME.IMAGECHANGED)({ newImage }))
   }
 
 }

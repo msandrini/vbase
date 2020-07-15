@@ -71,7 +71,7 @@ const renderOtherNames = (otherNames) => {
 }
 
 const GamePage = () => {
-  const gameState = useSelector(state => state.game); console.log(gameState.images)
+  const gameState = useSelector(state => state.game)
   const dispatch = useDispatch()
   const params = useParams()
 
@@ -107,7 +107,7 @@ const GamePage = () => {
       </>
     )
   }
-  const { info: game, seriesGames, images } = gameState
+  const { info: game, seriesGames } = gameState
   if (game && game.title) {
     return (
       <div>
@@ -117,7 +117,7 @@ const GamePage = () => {
           {game.specialStatus && (
             <span className='special-status'>{t('sps__' + game.specialStatus)}</span>
           )}
-          <GamePicture gameId={gameId} total={images} />
+          <GamePicture gameId={gameId} />
           <div className='main-box'>
             <GamePlaces releasePlaces={game.releasePlaces} otherNames={game.otherNames} />
             <GameEditorScore score={game.editorScore} />

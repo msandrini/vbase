@@ -43,7 +43,9 @@ const routing = (app) => {
 
   /* assets (number of gameplay images per game) */
 
-    .get('/images-gameplay/:code', (req, res) => assets.images.gameplay.list(res, req.params.code))
+    .get('/*.(js|css|map|png)', assets.file)
+    .get('/static/images/*/*/*.png', assets.file) // other images (addons/companies)
+    .get('/static/images/*/*/*/*.png', assets.file) // game images
 
   /* default route (404) */
 
