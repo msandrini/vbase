@@ -20,7 +20,7 @@
   "dependencies": {
     "axios": "^0.19.2",
     "express": "^4.17.1",
-    "immer": "^6.0.9",
+    "immer": "^8.0.1",
     "locale": "^0.1.0",
     "qs": "^6.9.4",
     "rc-slider": "^9.3.0",
